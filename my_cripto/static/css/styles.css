@@ -1,0 +1,16 @@
+header , footer{
+    background-color: rgb(114, 77, 188);
+}
+
+header p, footer p{
+    color: grey;
+    font-weight: bold;
+    font-size: larger;
+}
+
+#tabla_movimientos {
+    margin-top: 30px;
+    border-style: outset;
+    border: 5px solid rgb(29, 16, 39);
+    border-radius: 5px;
+  }
