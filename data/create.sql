@@ -13,3 +13,4 @@ CREATE INDEX "orden" ON "movimientos" (
 	"fecha"	DESC,
 	"hora"	DESC
 )
+#y si lo ordeno por id mejor que por fecha ¿?¿?¿?¿ - en get_al lo hge puesto  ordenado por id, alomejor hay que borrar el orden de aqui

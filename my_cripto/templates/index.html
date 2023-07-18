@@ -5,14 +5,16 @@
     <link rel="stylesheet" href="/static/css/pico.css">
     <link rel="stylesheet" href="/static/css/styles.css">
     <title>Snow cripto</title>
+    <script src="/static/js/app.js"></script>
 </head>
 <body>
     <header>
-        <p class="container">Snow cripto</p>
+        <p>Snow cripto</p>
     </header>
-    <section class="container" id="tabla_movimientos">
+    <a href="">Inicio</a><a href="">Calcular</a><a href="">Estado</a>
+    <section id="tabla_movimientos_d">
         <h1>Lista de movimientos</h1>
-        <table>
+        <table id="tabla_movimientos">
             <th>Fecha</th>
             <th>Hora</th>
             <th>From</th>
@@ -22,37 +24,54 @@
         </table>
     </section>
     <article id="tasa_intercambio">
-        tasa de intercambio
+        <h1>INTERCAMBIO</h1>
+        <form action="">
+            <div id="from">
+                <select name="from_moneda" id="from_moneda" placeholder="From">
+                    <option value="EUR">EUR</option>
+                    <option value="ETH">ETH</option>
+                    <option value="BNB">BNB</option>
+                    <option value="ADA">ADA</option>
+                    <option value="DOT">DOT</option>
+                    <option value="BTC">BTC</option>
+                    <option value="USDT">USDT</option>
+                    <option value="XRP">XRP</option>
+                    <option value="SOL">SOL</option>
+                    <option value="MATIC">MATIC</option>
+                </select>
+                <input type="text" name="from_cantidad" id="from_cantidad" step="0.00001" placeholder="Cantidad">
+                <button id="calcular">Calcular</button>
+            </div>
+            
+        </form>
+        <form action="">
+            <div id="to">
+                <select name="to_moneda" id="to_moneda" aria-placeholder="To">
+                    <option value="EUR">EUR</option>
+                    <option value="ETH">ETH</option>
+                    <option value="BNB">BNB</option>
+                    <option value="ADA">ADA</option>
+                    <option value="DOT">DOT</option>
+                    <option value="BTC">BTC</option>
+                    <option value="USDT">USDT</option>
+                    <option value="XRP">XRP</option>
+                    <option value="SOL">SOL</option>
+                    <option value="MATIC">MATIC</option>
+                </select>
+                <br>meter resultado de cambio aqui</div>
+                
+            </div>
+            
+        </form>
+        
     </article>
     <article id="estado_inversion">
         <h1>Estado de la inversion</h1>
-        <table>
-            <th>Cantidad</th>
-        <th>Moneda</th>
-        <th>Canidad</th>
-        </table>
-        
-        <table>
-            <tr>
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>5</td>
-                <td>6</td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td>8</td>
-                <td>9</td>
-            </tr>
-        </table>
+       
     </article>
 
     <footer>
-        <p class="container">&copy; 2023 - Nieves Gómez</p>
+        <p class=>&copy; 2023 - Nieves Gómez</p>
     </footer>
 </body>
 </html>
