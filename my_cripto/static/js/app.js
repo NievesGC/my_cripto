@@ -6,10 +6,9 @@ function appendCell(row,data){
     row.appendChild(the_cell)
 }
 
-function muestraTodos(){
-    let pedido = this.responseText
-    let lista = JSON.parse(pedido)
-    let data = lista.data
+function muestraTodos(data){
+    
+    //let data = lista.data
     let the_father = document.querySelector("#tabla_movimientos")
 
     for (let i=0; i < data.length; i++){
@@ -48,7 +47,7 @@ function validarCalculo(event){
     let fecha = new Date(document.querySelector("#fecha").value)
 
     let hora = new Date("1970-01-01T" + document.querySelector("#hora").value + "Z")
-
+    let from_moneda = document.querySelector("#from_moneda").value
     let from_cantidad = document.querySelector("#from_cantidad").value
     if (from_cantidad < 0){
         alert("La cantidad ha de ser mayor a 0")
@@ -63,6 +62,9 @@ function convert_to_json(registro){
     return registro.json()
 }
 
+function process_error(error){
+    alert("Se ha producido el error :" + error)
+}
 
 window.onload = function (){
 /*
@@ -76,10 +78,13 @@ window.onload = function (){
         .catch(process_error)*/
 
  
-    pet_todos.open("GET","/api/v1/movimientos")
-    pet_todos.addEventListener("load", muestraTodos)
+    fetch("/api/v1/movimientos")
+        .then(convert_to_json)
+        .then(muestraTodos)
+        .catch(process_error)
+    
 
-    pet_todos.send()
+    
 
     let btnCompra = document.querySelector("#btnCompra")
     btnCompra.addEventListener("click", function(event){
