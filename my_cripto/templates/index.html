@@ -11,7 +11,9 @@
     <header>
         <p>Snow cripto</p>
     </header>
-    <a href="">Inicio</a><a href="">Calcular</a><a href="">Estado</a>
+    <nav>
+        <a href="#" id="btnCompra" role="button">Compra</a>
+    </nav>
     <section id="tabla_movimientos_d">
         <h1>Lista de movimientos</h1>
         <table id="tabla_movimientos">
@@ -23,9 +25,9 @@
             <th>Cantidad</th>
         </table>
     </section>
-    <article id="tasa_intercambio">
+    <article id="tasa_intercambio" class="invisible">
         <h1>INTERCAMBIO</h1>
-        <form action="">
+        <form>
             <div id="from">
                 <select name="from_moneda" id="from_moneda" placeholder="From">
                     <option value="EUR">EUR</option>
@@ -60,6 +62,9 @@
                 </select>
                 <br>meter resultado de cambio aqui</div>
                 
+            </div>
+            <div>
+                <input type="submit" name="submit" id="submit" value="Aceptar">
             </div>
             
         </form>

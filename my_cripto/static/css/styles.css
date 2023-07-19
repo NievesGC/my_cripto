@@ -36,6 +36,6 @@ header p, footer p{
     margin: 10px;
 }
 
-#calcular {
-
+.invisible{
+    display: none;
 }
