@@ -12,7 +12,7 @@ def index():
 @app.route("/api/v1/movimientos", methods = ["GET"])
 def todos():
     movimientos = dao.get_all()
-    return movimientos
+    return {"status":"sucess", "data":movimientos}
 
 """    
 @app.route("/api/v1/tasa/<moneda_from>/<moneda_to>",methods = ["POST"])
