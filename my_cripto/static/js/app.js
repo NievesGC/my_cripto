@@ -1,4 +1,4 @@
-var pet_todos = new XMLHttpRequest()
+
 
 function appendCell(row,data){
     let the_cell = document.createElement("td")
@@ -8,7 +8,7 @@ function appendCell(row,data){
 
 function muestraTodos(data){
     
-    //let data = lista.data
+    
     let the_father = document.querySelector("#tabla_movimientos")
 
     for (let i=0; i < data.length; i++){
@@ -27,7 +27,9 @@ function muestraTodos(data){
 function validarCalculo(event){
     event.preventDefault()
 
-    /*let fecha = document.querySelector("#fecha").value; esta es la primera opcion pero creo que no va a funcionar 
+    /*
+    DEFINItiVO - ESTO NO VA AQUI - LO AÑADO EN EL VOTON ACEPTAR 
+    let fecha = document.querySelector("#fecha").value; esta es la primera opcion pero creo que no va a funcionar 
     porque no se donde va abuscar fecha, en lal de abajo que es la que creo mas viable y depsues abria que cambiar el 
     models/Movimiento, provar primeor con let y despes con var* y con la hora loi mismo */
     //let fecha = new Date(document.querySelector("#fecha").value)-----> esta es la que creo que va a funconar y la primera que probare si me hace flata validacion
