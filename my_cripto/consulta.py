@@ -17,11 +17,6 @@ cogemos el response (que es el precio unitario)x
 -lo empaquetamos muy bonito y lo mandamos a js
 """
 
-data = {
-    "from_moneda": "EUR",
-    "from_cantidad": "1000",
-    "to_moneda": "BTC"
-}
 
 
 def get_to_cantidad(data):
@@ -37,7 +32,7 @@ def get_to_cantidad(data):
         if response.status_code == 200:
             return to_cantidad
     except:
-        return response.status_code, "-",respuesta["error"]
+        return 5
 
-print(get_to_cantidad(data))
+
 

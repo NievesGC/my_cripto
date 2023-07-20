@@ -65,6 +65,14 @@ window.onload = function (){
         let formulario = document.querySelector("#tasa_intercambio")
         formulario.classList.remove("invisible")
 
-        document.querySelector("#calcular").addEventListener("click",validarCalculo)
-    })
+        document.querySelector("#calcular").addEventListener("click",function(){
+            let f_moneda=document.querySelector("#from_moneda").value
+            let f_cantidad=document.querySelector("#from_cantidad").value
+            let t_moneda=document.querySelector("#to_moneda").value
+            
+            fetch(`/api/v1/tasa/daigualelnombre?from_moneda=${f_moneda}&from_cantidad=${f_cantidad}&to_moneda=${t_moneda}`)
+ 
+            })
+        }
+    )
 }
