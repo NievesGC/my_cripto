@@ -23,7 +23,7 @@ function muestraTodos(data){
         appendCell(the_row,data.data[i].to_cantidad)
     }
 }
-
+/*
 function validarCalculo(event){
     event.preventDefault()
 
@@ -38,7 +38,7 @@ function validarCalculo(event){
     
     guardarCalculo(fecha,hora,from_moneda,from_cantidad,to_moneda)
     
-}
+}*/
 
 function convert_to_json(registro){
     return registro.json()
@@ -65,12 +65,34 @@ window.onload = function (){
         let formulario = document.querySelector("#tasa_intercambio")
         formulario.classList.remove("invisible")
 
-        document.querySelector("#calcular").addEventListener("click",function(){
-            let f_moneda=document.querySelector("#from_moneda").value
-            let f_cantidad=document.querySelector("#from_cantidad").value
-            let t_moneda=document.querySelector("#to_moneda").value
+     //dejar la linea del document y pasar el resto a una funcion
+       document.querySelector("#calcular").addEventListener("click",function(){
+            /*
+        //  let f_moneda=document.querySelector("#from_moneda").value
+            let moneda_from=document.createElement("from_moneda");
+            moneda_from.setAttribute("value","?from_moneda=$"+document.querySelector("#from_moneda").value)
             
-            fetch(`/api/v1/tasa/daigualelnombre?from_moneda=${f_moneda}&from_cantidad=${f_cantidad}&to_moneda=${t_moneda}`)
+            //let t_moneda=document.querySelector("#to_moneda").value
+            let moneda_to=document.createElement("to_moneda");
+            moneda_to.setAttribute("value","?to_moneda=$"+document.querySelector("#to_moneda").value)
+            */
+
+            let moneda_from = document.createElement('from_moneda');
+            moneda_from.setAttribute('value', '?from_moneda=$' + document.querySelector("#from_moneda").value);
+            formulario.appendChild(moneda_from);
+
+            let moneda_to = document.createElement('to_moneda');
+            moneda_to.setAttribute('value', '&to_moneda=$' + document.querySelector("#to_moneda").value);
+            formulario.appendChild(moneda_to);
+
+            let f_cantidad=document.querySelector("#from_cantidad").value
+            if (f_cantidad < 0){
+                alert("La cantidad ha de ser mayor a 0")
+                return
+            }
+            
+            
+            fetch(`/api/v1/tasa/moneda_from/moneda_to`)
  
             })
         }
