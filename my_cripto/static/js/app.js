@@ -23,7 +23,7 @@ function muestraTodos(data){
         appendCell(the_row,data.data[i].to_cantidad)
     }
 }
-
+/*
 function validarCalculo(event){
     event.preventDefault()
 
@@ -38,7 +38,7 @@ function validarCalculo(event){
     
     guardarCalculo(fecha,hora,from_moneda,from_cantidad,to_moneda)
     
-}
+}*/
 
 function convert_to_json(registro){
     return registro.json()
@@ -46,6 +46,23 @@ function convert_to_json(registro){
 
 function process_error(error){
     alert("Se ha producido el error :" + error)
+}
+function consulta(formulario){
+    let f_moneda=document.querySelector("#from_moneda").value
+    let f_cantidad=document.querySelector("#from_cantidad").value
+    if (isNaN(f_cantidad)){
+        alert("Los valores introducidos han de ser numéricos")
+        return
+    }
+    if (f_cantidad < 0){
+        alert("La cantidad ha de ser supeior a 0")
+        return
+    }
+    let t_moneda=document.querySelector("#to_moneda").value
+    
+    fetch(`/api/v1/tasa/moneda_from/moneda_to?from_moneda=${f_moneda}&to_moneda=${t_moneda}`)
+
+    
 }
 
 window.onload = function (){
@@ -65,14 +82,7 @@ window.onload = function (){
         let formulario = document.querySelector("#tasa_intercambio")
         formulario.classList.remove("invisible")
 
-        document.querySelector("#calcular").addEventListener("click",function(){
-            let f_moneda=document.querySelector("#from_moneda").value
-            let f_cantidad=document.querySelector("#from_cantidad").value
-            let t_moneda=document.querySelector("#to_moneda").value
-            
-            fetch(`/api/v1/tasa/daigualelnombre?from_moneda=${f_moneda}&from_cantidad=${f_cantidad}&to_moneda=${t_moneda}`)
- 
-            })
+        document.querySelector("#calcular").addEventListener("click",consulta)
         }
     )
 }

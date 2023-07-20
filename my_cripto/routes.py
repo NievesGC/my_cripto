@@ -15,17 +15,16 @@ def todos():
     movimientos = dao.get_all()
     return {"status":"sucess", "data":movimientos}
 
-@app.route("/api/v1/tasa/daigualelnombre",methods = ["GET"])
+@app.route("/api/v1/tasa/moneda_from/moneda_to",methods = ["GET"])
 def cambio():
     print(request.args)
-    from_cantidad = request.args.get("from_cantidad")
     from_moneda = request.args.get("from_moneda")
     to_moneda = request.args.get("to_moneda")
     data = {"from_moneda": from_moneda,
-            "from_cantidad": from_cantidad,
             "to_moneda": to_moneda}
     print(data)
     resultado = consulta.get_to_cantidad(data)
-    print(resultado)
-    return {"resultado": resultado}
+    rate = {"from_moneda":data["from_moneda"],"to_moneda":data["to_moneda"],"rate":resultado}
+    print(rate)
+    return {"status":"sucess","rate":rate }
 
