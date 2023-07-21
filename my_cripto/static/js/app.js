@@ -25,29 +25,29 @@ function muestraTodos(data){
 }
 
 function convert_to_json(registro){
-    return registro.json()
+    return registro.json();
 }
 
 function process_error(error){
     alert("Se ha producido el error :" + error)
 }
 function consulta(){
-    let f_moneda=document.querySelector("#from_moneda").value
-    let f_cantidad=document.querySelector("#from_cantidad").value
-    if (isNaN(f_cantidad)){
-        alert("Los valores introducidos han de ser numéricos")
-        return
+    let f_moneda = document.querySelector("#from_moneda").value;
+    let f_cantidad = document.querySelector("#from_cantidad").value;
+    if (isNaN(f_cantidad)) {
+        alert("Los valores introducidos han de ser numéricos");
+        return;
     }
-    if (f_cantidad < 0){
-        alert("La cantidad ha de ser supeior a 0")
-        return
+    if (f_cantidad < 0) {
+        alert("La cantidad ha de ser superior a 0");
+        return;
     }
-    let t_moneda=document.querySelector("#to_moneda").value
+    let t_moneda = document.querySelector("#to_moneda").value;
     
-    fetch(`/api/v1/tasa/${f_moneda}/${t_moneda}?from_cantidad=${f_cantidad}`)
+    fetch(`/api/v1/tasa/${f_moneda}/${t_moneda}`)
         .then(convert_to_json)
-        .then(muestraConsulta)
-        .catch(process_error)
+        .then(muestraConsulta) 
+        .catch(process_error);
     
 }
 
@@ -78,7 +78,7 @@ window.onload = function(){
         let formulario = document.querySelector("#tasa_intercambio")
         formulario.classList.remove("invisible")
 
-        document.querySelector("#calcular").addEventListener("click",function(){
+        document.querySelector("#calcular").addEventListener("click",function(event){
             event.preventDefault();
             consulta();
             
