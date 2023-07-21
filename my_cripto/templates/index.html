@@ -29,6 +29,7 @@
         <h1>INTERCAMBIO</h1>
         <form>
             <div id="from">
+                <label for="from_moneda_from">From:</label>
                 <select name="from_moneda" id="from_moneda" placeholder="From">
                     <option value="EUR">EUR</option>
                     <option value="ETH">ETH</option>
@@ -41,6 +42,7 @@
                     <option value="SOL">SOL</option>
                     <option value="MATIC">MATIC</option>
                 </select>
+                <label for="from_cantidad_input">Cantidad:</label>
                 <input type="text" name="from_cantidad" id="from_cantidad" step="0.00001" placeholder="Cantidad">
                 <button id="calcular">Calcular</button>
             </div>
@@ -48,6 +50,7 @@
         </form>
         <form action="">
             <div id="to">
+                <label for="to_moneda_select">To:</label>
                 <select name="to_moneda" id="to_moneda" aria-placeholder="To">
                     <option value="EUR">EUR</option>
                     <option value="ETH">ETH</option>
@@ -60,7 +63,7 @@
                     <option value="SOL">SOL</option>
                     <option value="MATIC">MATIC</option>
                 </select>
-                <br>meter resultado de cambio aqui</div>
+                
                 
             </div>
             <div>

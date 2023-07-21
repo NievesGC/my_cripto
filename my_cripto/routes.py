@@ -26,5 +26,5 @@ def cambio():
     resultado = consulta.get_to_cantidad(data)
     rate = {"from_moneda":data["from_moneda"],"to_moneda":data["to_moneda"],"rate":resultado}
     print(rate)
-    return {"status":"sucess","rate":rate }
+    return rate
 

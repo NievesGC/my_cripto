@@ -23,22 +23,6 @@ function muestraTodos(data){
         appendCell(the_row,data.data[i].to_cantidad)
     }
 }
-/*
-function validarCalculo(event){
-    event.preventDefault()
-
-    let from_moneda = document.querySelector("#from_moneda").value
-    let from_cantidad = document.querySelector("#from_cantidad").value
-    if (from_cantidad < 0){
-        alert("La cantidad ha de ser mayor a 0")
-        return
-    }
-    let to_moneda = document.querySelector("#to_moneda").value
-    
-    
-    guardarCalculo(fecha,hora,from_moneda,from_cantidad,to_moneda)
-    
-}*/
 
 function convert_to_json(registro){
     return registro.json()
@@ -47,7 +31,7 @@ function convert_to_json(registro){
 function process_error(error){
     alert("Se ha producido el error :" + error)
 }
-function consulta(formulario){
+function consulta(){
     let f_moneda=document.querySelector("#from_moneda").value
     let f_cantidad=document.querySelector("#from_cantidad").value
     if (isNaN(f_cantidad)){
@@ -61,18 +45,29 @@ function consulta(formulario){
     let t_moneda=document.querySelector("#to_moneda").value
     
     fetch(`/api/v1/tasa/moneda_from/moneda_to?from_moneda=${f_moneda}&to_moneda=${t_moneda}`)
-
+    fetch("/api/v1/tasa/moneda_from/moneda_to")
+        .then(convert_to_json)
+        .then(muestraConsulta)
+        .catch(process_error)
     
 }
 
-window.onload = function (){
+
+
+function muestraConsulta(rate){
+    let the_father = document.querySelector("#to")
+    let pCantidadTo = document.createElement("p")
+    pCantidadTo.id = "to_cantidad"
+    pCantidadTo.innerHTML = rate.rate
+    the_father.appendChild(pCantidadTo)
+}
+
+window.onload = function(){
 
     fetch("/api/v1/movimientos")
         .then(convert_to_json)
         .then(muestraTodos)
         .catch(process_error)
-    
-
     
 
     let btnCompra = document.querySelector("#btnCompra")
@@ -82,7 +77,14 @@ window.onload = function (){
         let formulario = document.querySelector("#tasa_intercambio")
         formulario.classList.remove("invisible")
 
-        document.querySelector("#calcular").addEventListener("click",consulta)
+        document.querySelector("#calcular").addEventListener("click",function(){
+            
+            consulta();
+            event.preventDefault();
+        })
+            
+        
         }
     )
+    
 }
