@@ -44,8 +44,7 @@ function consulta(){
     }
     let t_moneda=document.querySelector("#to_moneda").value
     
-    fetch(`/api/v1/tasa/moneda_from/moneda_to?from_moneda=${f_moneda}&to_moneda=${t_moneda}`)
-    fetch("/api/v1/tasa/moneda_from/moneda_to")
+    fetch(`/api/v1/tasa/${f_moneda}/${t_moneda}?from_cantidad=${f_cantidad}`)
         .then(convert_to_json)
         .then(muestraConsulta)
         .catch(process_error)
@@ -55,11 +54,13 @@ function consulta(){
 
 
 function muestraConsulta(rate){
-    let the_father = document.querySelector("#to")
-    let pCantidadTo = document.createElement("p")
-    pCantidadTo.id = "to_cantidad"
-    pCantidadTo.innerHTML = rate.rate
-    the_father.appendChild(pCantidadTo)
+    let to_moneda = document.querySelector("#to_moneda").value;
+    let the_father = document.querySelector("#to");
+    let pCantidadTo = document.createElement("p");
+    pCantidadTo.id = "to_cantidad";
+    let rate_num = parseFloat(rate.rate);
+    pCantidadTo.innerHTML = rate_num.toFixed(10);
+    the_father.appendChild(pCantidadTo);
 }
 
 window.onload = function(){
@@ -78,9 +79,9 @@ window.onload = function(){
         formulario.classList.remove("invisible")
 
         document.querySelector("#calcular").addEventListener("click",function(){
-            
-            consulta();
             event.preventDefault();
+            consulta();
+            
         })
             
         
