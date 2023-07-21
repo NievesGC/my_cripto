@@ -34,7 +34,7 @@ function process_error(error){
 function consulta(){
     let f_moneda = document.querySelector("#from_moneda").value;
     let f_cantidad = document.querySelector("#from_cantidad").value;
-    if (isNaN(f_cantidad)) {
+    if (isNaN(f_cantidad)){
         alert("Los valores introducidos han de ser numéricos");
         return;
     }
@@ -44,7 +44,7 @@ function consulta(){
     }
     let t_moneda = document.querySelector("#to_moneda").value;
     
-    fetch(`/api/v1/tasa/${f_moneda}/${t_moneda}`)
+    fetch(`/api/v1/tasa/${f_moneda}/${t_moneda}?from_cantidad=${f_cantidad}`)
         .then(convert_to_json)
         .then(muestraConsulta) 
         .catch(process_error);
@@ -59,7 +59,7 @@ function muestraConsulta(rate){
     let pCantidadTo = document.createElement("p");
     pCantidadTo.id = "to_cantidad";
     let rate_num = parseFloat(rate.rate);
-    pCantidadTo.innerHTML = rate_num.toFixed(10);
+    pCantidadTo.innerHTML = "Cantidad: " + rate_num.toFixed(10);
     the_father.appendChild(pCantidadTo);
 }
 

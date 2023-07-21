@@ -17,9 +17,9 @@ def todos():
 
 @app.route("/api/v1/tasa/<from_moneda>/<to_moneda>",methods = ["GET"])
 def cambio(from_moneda,to_moneda):
-    data = {"from_moneda": from_moneda, "to_moneda": to_moneda}
-    resultado = consulta.get_to_cantidad(data)
-    rate = {"from_moneda": data["from_moneda"], "to_moneda": data["to_moneda"], "rate": resultado}
+    from_cantidad = float(request.args.get('from_cantidad'))
+    data = {"from_moneda": from_moneda, "to_moneda": to_moneda, "from_cantidad" : from_cantidad}
+    rate = consulta.get_to_cantidad(data)
     return jsonify(rate)
     
 
