@@ -58,9 +58,14 @@ function muestraConsulta(rate){
     let the_father = document.querySelector("#to");
     let pCantidadTo = document.createElement("p");
     pCantidadTo.id = "to_cantidad";
+    let pPrecioUnitario = document.createElement("p");
+    pPrecioUnitario.id = "precio_unitario";
     let rate_num = parseFloat(rate.rate);
+    let precioUnitario = parseFloat(rate.precio_unitario);
     pCantidadTo.innerHTML = "Cantidad: " + rate_num.toFixed(10);
+    pPrecioUnitario.innerHTML = "Precio unitario: " + precioUnitario.toFixed(10);
     the_father.appendChild(pCantidadTo);
+    the_father.appendChild(pPrecioUnitario)
 }
 
 window.onload = function(){
