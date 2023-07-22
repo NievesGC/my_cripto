@@ -21,5 +21,15 @@ def cambio(from_moneda,to_moneda):
     data = {"from_moneda": from_moneda, "to_moneda": to_moneda, "from_cantidad" : from_cantidad}
     rate = consulta.get_to_cantidad(data)
     return jsonify(rate)
+
+@app.route("/api/v1/movimiento", methods = ["POST"])
+def inserta():
+    movimiento = Movimiento(request.json.get("fecha"),
+                            request.json.get("hora"),
+                            request.json.get("from_moneda"),
+                            request.json.get("from_cantidad"),
+                            request.json.get("to_moneda"),
+                            request.json.get("to_cantidad"))
+    dao.insert(movimiento)
     
 
