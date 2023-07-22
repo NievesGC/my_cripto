@@ -10,6 +10,7 @@ function muestraTodos(data){
     
     
     let the_father = document.querySelector("#tabla_movimientos")
+    the_father.innerHTML=""
 
     for (let i=0; i < data.data.length; i++){
         let the_row = document.createElement("tr")
@@ -46,17 +47,16 @@ function consulta(){
     
     let t_moneda = document.querySelector("#to_moneda").value;
 
-    unificaDatos(f_moneda,t_moneda,f_cantidad) //dejar de momento aqui/creo que no va a funconar para la validacion,tiene que ir destras de fetch?¿? como le meto las variables para que no me de error undefined
     
     fetch(`/api/v1/tasa/${f_moneda}/${t_moneda}?from_cantidad=${f_cantidad}`)
         .then(convert_to_json)
         .then(muestraConsulta) 
         .catch(process_error);
- 
+    
 }
 
 function muestraConsulta(rate){
-    let to_moneda = document.querySelector("#to_moneda").value;
+    //let to_moneda = document.querySelector("#to_moneda").value; ¿esto porque lo he puesot aqui- es necesario ?
     let the_father = document.querySelector("#to_moneda_muestra");
     the_father.innerHTML=""
     
@@ -66,7 +66,7 @@ function muestraConsulta(rate){
     let pPrecioUnitario = document.createElement("p");
     pPrecioUnitario.id = "precio_unitario";
    
-    let rate_num = parseFloat(rate.rate);
+    rate_num = parseFloat(rate.rate);
     let precioUnitario = parseFloat(rate.precio_unitario);
    
     pCantidadTo.innerHTML = "Cantidad: " + rate_num.toFixed(10);
@@ -75,17 +75,21 @@ function muestraConsulta(rate){
     the_father.appendChild(pCantidadTo);
     the_father.appendChild(pPrecioUnitario);
 
-    unificaDatos(rate_num,precioUnitario)
-}
+    //EXTRACION DE DATOS DEL SERVIDOR PARA VALIDACION
 
-function unificaDatos(f_moneda,t_moneda,f_cantidad,rate_num,precioUnitario){
+    f_moneda = rate.from_moneda;
+    f_cantidad = rate.from_cantidad;
+    t_moneda = rate.to_moneda
+}
+/*
+function unificaDatos(){
     let fecha = new Date().toISOString().slice(0,10);
     let fechaHora = new Date()
     let horas = fechaHora.getHours();
     let minutos = fechaHora.getMinutes();
     let hora =`${horas}:${minutos}`;
     let from_cantidad_actual = document.querySelector("#from_cantidad").value;
-    data = {"fecha": fecha,
+    let data = {"fecha": fecha,
             "hora": hora,
             "from_moneda": f_moneda,
             "from_cantidad": f_cantidad,
@@ -94,29 +98,56 @@ function unificaDatos(f_moneda,t_moneda,f_cantidad,rate_num,precioUnitario){
             "to_cantidad": rate_num,
             "precio_unitario": precioUnitario
         }
-}
+    guardarMovimiento(data)
+}*/
 
 function guardarMovimiento(){
-    let data = data;
+    let fecha = new Date().toISOString().slice(0,10);
+    let fechaHora = new Date()
+    let horas = fechaHora.getHours();
+    let minutos = fechaHora.getMinutes();
+    let hora =`${horas}:${minutos}`;
+    let from_cantidad_actual = document.querySelector("#from_cantidad").value;
+    let data = {"fecha": fecha,
+            "hora": hora,
+            "from_moneda": f_moneda,
+            "from_cantidad": f_cantidad,
+            "from_cantidad_actual": from_cantidad_actual,
+            "to_moneda": t_moneda,
+            "to_cantidad": rate_num,
+            //"precio_unitario": precioUnitario
+        };
     let options = {
         body: JSON.stringify(data),
-        method: "POST",
+        method:"POST",
         headers: {
             "Content-Type":"application/json"
         }
     };
-    fetch("/api/v1/movimiento")
+    fetch("/api/v1/movimiento",options)
         .then(convert_to_json)
         .then(inserta)
         .catch(process_error)
 
 }
 
-function inserta(){
-    fetch("/api/v1/movimiento")
-        .then(convert_to_json)
-        .then(muestraTodos)
-        .catch(process_error)
+function inserta(data){
+    /*let options = {
+        body: JSON.stringify(data),
+        method: "POST",
+        headers: {
+            "Content-Type":"application/json"
+        }
+    }*/
+    if (data.status){
+        fetch("/api/v1/movimientos")
+            .then(convert_to_json)
+            .then(muestraTodos)
+            .catch(process_error)
+    }else{
+        alert("ERROR EN LA INSERCIÓN")
+    }
+    
 }
 
 window.onload = function(){
@@ -143,7 +174,7 @@ window.onload = function(){
             
         document.querySelector("#submit").addEventListener("click",function(event){
             event.preventDefault();
-            guardarMovimiento;
+            guardarMovimiento();
             
 
         })

@@ -24,12 +24,27 @@ def cambio(from_moneda,to_moneda):
 
 @app.route("/api/v1/movimiento", methods = ["POST"])
 def inserta():
-    movimiento = Movimiento(request.json.get("fecha"),
-                            request.json.get("hora"),
-                            request.json.get("from_moneda"),
-                            request.json.get("from_cantidad"),
-                            request.json.get("to_moneda"),
-                            request.json.get("to_cantidad"))
-    dao.insert(movimiento)
-    
+    try:
+        movimiento = Movimiento(request.json.get("fecha"),
+                                request.json.get("hora"),
+                                request.json.get("from_moneda"),
+                                request.json.get("from_cantidad"),
+                                request.json.get("to_moneda"),
+                                request.json.get("to_cantidad"))
+        dao.insert(movimiento)
+        respuesta = {"status":True,
+                     "data": "None"}
+        return jsonify(respuesta)
+    except ValueError:
+        respuesta ={
+            "status": "fail",
+            "mensaje": "Saldo insuficiente"
+        }
+        return jsonify(respuesta)
+    except sqlite3.Error as e:
+        respuesta = {
+            "status": "fail",
+            "mensaje": "Mensaje de error"
+        }
+        return jsonify(respuesta)
 

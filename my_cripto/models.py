@@ -4,8 +4,8 @@ from datetime import datetime
 class Movimiento:
     def __init__(self,fecha,hora,from_moneda,from_cantidad,to_moneda,to_cantidad, id = None):
         self.id = id
-        self.fecha = datetime.now()
-        self.hora = datetime.now().time().strftime('%H:%M:%S')
+        self.fecha = fecha
+        self.hora = hora
         self.from_moneda = from_moneda
         self.from_cantidad = from_cantidad
         self.to_moneda = to_moneda
@@ -51,7 +51,7 @@ class MovimientoDAOsqlite:
     def insert(self,movimiento):
         query = """
         INSERT INTO movimientos
-            (fecha,hora,from_moneda_from_cantidad,to_moneda,_to_cantidad)
+            (fecha,hora,from_moneda,from_cantidad,to_moneda,to_cantidad)
         VALUES(?,?,?,?,?,?)
         """
 
@@ -63,7 +63,7 @@ class MovimientoDAOsqlite:
 
     def get(self,id):
         query = """
-        SELECT fecha,hora,from_moneda_from_cantidad,to_moneda,_to_cantidad,id
+        SELECT fecha,hora,from_moneda,from_cantidad,to_moneda,to_cantidad,id
             FROM movimientos
             WHERE id = ?;
         """
