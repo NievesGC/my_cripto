@@ -4,29 +4,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/pico.css">
     <link rel="stylesheet" href="/static/css/styles.css">
-    <title>Snow cripto</title>
+    <title>CriptoSnow</title>
     <script src="/static/js/app.js"></script>
 </head>
 <body>
     <header>
-        <p>Snow cripto</p>
+        <p>CriptoSnow</p>
     </header>
     <nav>
         <a href="#" id="btnCompra" role="button">Compra</a>
     </nav>
     <section id="tabla_movimientos_d">
-        <h1>Lista de movimientos</h1>
-        <table id="tabla_movimientos">
-            <th>Fecha</th>
-            <th>Hora</th>
-            <th>From</th>
-            <th>Cantidad</th>
-            <th>To</th>
-            <th>Cantidad</th>
+        <h1 id = "Lista">Lista de movimientos</h1>
+        <table>
+            <thead>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>From</th>
+                <th>Cantidad</th>
+                <th>To</th>
+                <th>Cantidad</th>
+            </thead>
+            <tbody id="tabla_movimientos">
+
+            </tbody>
+            
         </table>
     </section>
     <article id="tasa_intercambio" class="invisible">
-        <h1>INTERCAMBIO</h1>
+        <h1 id = "tpv">TPV</h1>
+
         <form>
             <div id="from">
                 <label for="from_moneda_from">From:</label>
@@ -48,7 +55,7 @@
             </div>
             
         </form>
-        <form action="">
+        <form>
             <div id="to" >
                 
                 <label for="to_moneda_select">To:</label>
@@ -73,8 +80,9 @@
             <div>
                 <input type="submit" name="submit" id="submit" value="Aceptar">
             </div>
-            
         </form>
+    
+        
         
     </article>
     <article id="estado_inversion">

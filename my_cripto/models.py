@@ -1,8 +1,10 @@
 import sqlite3
 from datetime import datetime
 
+MONEDAS = {"EUR","ETH","BNB","ADA","DOT","BTC","USDT","XRP","SOL","MATIC"}
+
 class Movimiento:
-    def __init__(self,fecha,hora,from_moneda,from_cantidad,to_moneda,to_cantidad, id = None):
+    def __init__(self,fecha,hora,from_moneda,from_cantidad,to_moneda,to_cantidad,to_moneda_actual,precio_unitario, id = None):
         self.id = id
         self.fecha = fecha
         self.hora = hora
@@ -10,8 +12,22 @@ class Movimiento:
         self.from_cantidad = from_cantidad
         self.to_moneda = to_moneda
         self.to_cantidad = to_cantidad
+        self.to_moneda_actual = to_moneda_actual
+        self.to_precio_unitario = precio_unitario
 
+    @property
+    def from_moneda(self):
+        return self._from_moneda
     
+    @from_moneda.setter
+    def from_moneda(self,value):
+        self._from_moneda = value   
+        if self._from_moneda not in MONEDAS:
+            raise ValueError("La moneda seleccionada no es correcta")
+    
+    @property
+    def from_cantidad
+
     def __eq__(self,other):
         return self.fecha == other.fecha and self.hora == other.hora and self.from_moneda == other.from_moneda and self.from_cantidad == other.from_cantidad and self.to_moneda == other.to_moneda and self.to_cantidad == other.to_cantidad
     

@@ -12,15 +12,31 @@ def index():
 
 @app.route("/api/v1/movimientos", methods = ["GET"])
 def todos():
-    movimientos = dao.get_all()
-    return {"status":"sucess", "data":movimientos}
+    try:
+        movimientos = dao.get_all()
+        respuesta = {"status":"sucess", 
+                "data":movimientos}
+        return jsonify(respuesta)
+    except:
+        respuesta = { "status": "fail",
+                    "mensaje": "Mesnsaje de error/movimientos "
+        }
+        return jsonify(respuesta,400)
+
 
 @app.route("/api/v1/tasa/<from_moneda>/<to_moneda>",methods = ["GET"])
 def cambio(from_moneda,to_moneda):
-    from_cantidad = float(request.args.get('from_cantidad'))
-    data = {"from_moneda": from_moneda, "to_moneda": to_moneda, "from_cantidad" : from_cantidad}
-    rate = consulta.get_to_cantidad(data)
-    return jsonify(rate)
+    try:
+        from_cantidad = float(request.args.get('from_cantidad'))
+        data = {"from_moneda": from_moneda, "to_moneda": to_moneda, "from_cantidad" : from_cantidad}
+        rate = consulta.get_to_cantidad(data)
+        respuesta = {"status": "sucess", 
+                     "rate":rate}
+        return jsonify(respuesta)
+    except:
+        respuesta = {"status":"fail", 
+                     "mensaje":"Mensaje de error"}
+        return(respuesta,400)
 
 @app.route("/api/v1/movimiento", methods = ["POST"])
 def inserta():
@@ -30,17 +46,19 @@ def inserta():
                                 request.json.get("from_moneda"),
                                 request.json.get("from_cantidad"),
                                 request.json.get("to_moneda"),
-                                request.json.get("to_cantidad"))
+                                request.json.get("to_cantidad"),
+                                request.json.get("to_moneda_actual"),
+                                request.json.get("precio_unitario"))
         dao.insert(movimiento)
-        respuesta = {"status":True,
-                     "data": "None"}
-        return jsonify(respuesta)
+        respuesta = {"status": "sucess",
+                     "id": "<nuevo id creado>"}
+        return jsonify(respuesta,201)
     except ValueError:
         respuesta ={
             "status": "fail",
             "mensaje": "Saldo insuficiente"
         }
-        return jsonify(respuesta)
+        return jsonify(respuesta,200)
     except sqlite3.Error as e:
         respuesta = {
             "status": "fail",
