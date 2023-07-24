@@ -43,6 +43,7 @@ function process_error(error){
 function consulta(){
     let f_moneda = document.querySelector("#from_moneda").value;
     
+   
     let f_cantidad = document.querySelector("#from_cantidad").value;
     if (isNaN(f_cantidad)){
         alert("Los valores introducidos han de ser numéricos");
@@ -54,73 +55,76 @@ function consulta(){
     }
     
     let t_moneda = document.querySelector("#to_moneda").value;
+    
 
     
     fetch(`/api/v1/tasa/${f_moneda}/${t_moneda}?from_cantidad=${f_cantidad}`)
         .then(convert_to_json)
-        .then(muestraConsulta) 
+        .then(function (rate) { 
+            muestraConsulta(rate)
+                .then(function (rate) {
+                    let btnAceptar = document.querySelector("#submit");
+                    btnAceptar.addEventListener("click", function (event) {
+                        event.preventDefault();
+                        guardarMovimiento(rate);
+                    });
+                })
+                .catch(process_error);
+        })
         .catch(process_error);
-    
+        
 }
 
 function muestraConsulta(rate){
-
-    if (rate.status == "sucess"){
-        let the_father = document.querySelector("#to_moneda_muestra");
-        the_father.innerHTML=""
+    return new Promise(function (resolve, reject){
+        if (rate.status == "sucess"){
+            let the_father = document.querySelector("#to_moneda_muestra");
+            the_father.innerHTML=""
+            
+            let pCantidadTo = document.createElement("p");
+            pCantidadTo.id = "to_cantidad";
         
-        let pCantidadTo = document.createElement("p");
-        pCantidadTo.id = "to_cantidad";
-    
-        let pPrecioUnitario = document.createElement("p");
-        pPrecioUnitario.id = "precio_unitario";
-    
-        rate_num = parseFloat(rate.rate.rate);
-        let precioUnitario = parseFloat(rate.rate.precio_unitario);
-    
-        pCantidadTo.innerHTML = "Cantidad: " + rate_num.toFixed(10);
-        pPrecioUnitario.innerHTML = "Precio unitario: " + precioUnitario.toFixed(10);
+            let pPrecioUnitario = document.createElement("p");
+            pPrecioUnitario.id = "precio_unitario";
         
-        the_father.appendChild(pCantidadTo);
-        the_father.appendChild(pPrecioUnitario);
-    } else{
-        alert("Se ha prodcido el error:" + rate.mensaje)
-    }
-    
-   
-
-    //EXTRACION DE DATOS DEL SERVIDOR PARA VALIDACION
-    rate_num_data = parseFloat(rate.rate.rate);
-    f_moneda_data = rate.rate.from_moneda;
-    f_cantidad_data = rate.rate.from_cantidad;
-    t_moneda_data = rate.rate.to_moneda;
-    p_unitario_data = parseFloat(rate.rate.precio_unitario)
+            rate_num = parseFloat(rate.rate.rate);
+            let precioUnitario = parseFloat(rate.rate.precio_unitario);
+        
+            pCantidadTo.innerHTML = "Cantidad: " + rate_num.toFixed(15);
+            pPrecioUnitario.innerHTML = "Precio unitario: " + precioUnitario.toFixed(15);
+            
+            the_father.appendChild(pCantidadTo);
+            the_father.appendChild(pPrecioUnitario);
+            
+            resolve(rate)
+        } else{
+            alert("Se ha prodcido el error:" + rate.mensaje)
+            reject("Error en muestraConsulta");
+        }
+    });
 }
 
 
-function guardarMovimiento(){
+
+function guardarMovimiento(rate){
     let fecha = new Date().toISOString().slice(0,10);
     let fechaHora = new Date()
     let horas = fechaHora.getHours();
     let minutos = fechaHora.getMinutes();
     let hora =`${horas}:${minutos}`;
-    //let from_moneda: f_moneda_data;
-    //let from_cantidad: f_cantidad_data;
-    //let to_moneda: t_moneda_data;
+    let from_moneda = document.querySelector("#from_moneda").value;
     let from_cantidad_actual = document.querySelector("#from_cantidad").value;
-    let from_moneda_actual = document.querySelector("#from_moneda").value;
-    let to_moneda_actual = document.querySelector("#to_moneda").value;
+    let to_moneda = document.querySelector("#to_moneda").value;
+    let to_cantidad = document.querySelector("#to_cantidad").textContent;
+    let from_cantidad = rate.rate.from_cantidad
     let data = {"fecha": fecha,
-            "hora": hora,
-            "from_moneda": f_moneda_data,
-            "from_cantidad": f_cantidad_data,
-            "to_moneda": t_moneda_data,
-            "to_cantidad": rate_num_data,
-            "precio_unitario": p_unitario_data,
-            "from_cantidad_actual": from_cantidad_actual,
-            "from_moneda_actual": from_moneda_actual,
-            "to_moneda_actual": to_moneda_actual,
-        };
+                "hora": hora,
+                "from_moneda": from_moneda,
+                "from_cantidad": from_cantidad,
+                "to_moneda": to_moneda,
+                "to_cantidad": to_cantidad,
+                "from_cantidad_actual": from_cantidad_actual}
+            
     let options = {
         body: JSON.stringify(data),
         method:"POST",
@@ -129,19 +133,19 @@ function guardarMovimiento(){
         }
     };
     
-        fetch("/api/v1/movimiento",options)
-            .then(convert_to_json)
-            .then(inserta)
-            .catch(process_error)
+    fetch("/api/v1/movimiento",options)
+        .then(convert_to_json)
+        .then(inserta)
+        .catch(process_error)
         
 }
 
 function inserta(data){
     
-        fetch("/api/v1/movimientos")
-            .then(convert_to_json)
-            .then(muestraTodos)
-            .catch(process_error)
+    fetch("/api/v1/movimientos")
+        .then(convert_to_json)
+        .then(muestraTodos)
+        .catch(process_error)
    
     
 }
@@ -168,12 +172,7 @@ window.onload = function(){
             
         })
             
-        document.querySelector("#submit").addEventListener("click",function(event){
-            event.preventDefault();
-            guardarMovimiento();
-            
-
-        })
+        
 
         }
     )

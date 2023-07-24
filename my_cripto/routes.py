@@ -47,22 +47,22 @@ def inserta():
                                 request.json.get("from_cantidad"),
                                 request.json.get("to_moneda"),
                                 request.json.get("to_cantidad"),
-                                request.json.get("to_moneda_actual"),
+                                request.json.get("from_cantidad_actual"),
                                 request.json.get("precio_unitario"))
         dao.insert(movimiento)
         respuesta = {"status": "sucess",
                      "id": "<nuevo id creado>"}
         return jsonify(respuesta,201)
-    except ValueError:
+    except ValueError as e:
         respuesta ={
             "status": "fail",
-            "mensaje": "Saldo insuficiente"
+            "mensaje": str(e)
         }
         return jsonify(respuesta,200)
     except sqlite3.Error as e:
         respuesta = {
             "status": "fail",
-            "mensaje": "Mensaje de error"
+            "mensaje": str(e)
         }
         return jsonify(respuesta)
 
