@@ -71,3 +71,15 @@ def inserta():
         }
         return jsonify(respuesta)
 
+
+@app.route("/api/v1/status", methods = ["GET"])
+def status():
+    pass
+    """
+    datos = dao.get_all()
+        
+    
+    
+    gestion = " llamo a una funcion para que me deculda los datos que necesito insertar en la tabla"
+
+    return (gestion) "los datos que voy a insertar en status"""

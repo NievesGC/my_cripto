@@ -1,4 +1,4 @@
-
+let saveRate;
 
 function appendCell(row,data){
     let the_cell = document.createElement("td")
@@ -60,16 +60,9 @@ function consulta(){
     
     fetch(`/api/v1/tasa/${f_moneda}/${t_moneda}?from_cantidad=${f_cantidad}`)
         .then(convert_to_json)
-        .then(function (rate) {            
+        .then(function (rate) {  
+            saveRate = rate          
             muestraConsulta(rate)
-                .then(function () {
-                    let btnAceptar = document.querySelector("#submit");
-                    btnAceptar.addEventListener("click", function (event) {
-                        event.preventDefault();
-                        guardarMovimiento(rate);
-                    });
-                })
-                .catch(process_error);
         })
         .catch(process_error);
         
@@ -98,7 +91,7 @@ function muestraConsulta(rate){
             
             resolve(rate)
         } else{
-            alert("Se ha prodcido el error:" + rate.mensaje)
+            alert("Se ha prodcido el error:" + rate.mensaje);
             reject("Error en la consulta");
         }
     });
@@ -144,14 +137,6 @@ function guardarMovimiento(rate){
 
 function inserta(respuesta){
 
-    /*let options ={
-        body: JSON.stringify(respuesta),
-        method: "GET",
-        headers: {
-            "Content-Type":"application/json"
-        }
-
-    }*/
     let resp = respuesta[0]
     if (resp && resp.status === "sucess"){
         alert(resp.mensaje)
@@ -165,6 +150,7 @@ function inserta(respuesta){
 
       
 }
+
 
 window.onload = function(){
 
@@ -180,18 +166,26 @@ window.onload = function(){
         event.preventDefault()
 
         let formulario = document.querySelector("#tasa_intercambio")
-        formulario.classList.remove("invisible")
+            formulario.classList.remove("invisible")
 
-        document.querySelector("#calcular").addEventListener("click",function(event){
+        let btnCalcular =document.querySelector("#calcular")
+            btnCalcular.addEventListener("click",function(event){
             event.preventDefault();
             consulta();
             
         })
             
-        
+        let btnAceptar = document.querySelector("#submit");
+            btnAceptar.addEventListener("click", function (event) {
+            event.preventDefault();
+            guardarMovimiento(saveRate);
+        })
 
         }
+        
     )
+
+    
 
     
     

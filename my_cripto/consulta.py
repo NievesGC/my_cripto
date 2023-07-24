@@ -25,3 +25,21 @@ def get_to_cantidad(data):
 
 
 
+def lista(data):
+    monedas_from = []
+    
+    for fila in data:
+        divisa = data.from_moneda
+        monedas_from.append(divisa)
+    
+    
+    
+    
+    
+    
+    
+    monedas_to =[]
+    cantidad_from=[]
+    cantidad_to=[]
+    
+    saldos=[]
