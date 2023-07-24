@@ -15,11 +15,11 @@ def todos():
     try:
         movimientos = dao.get_all()
         respuesta = {"status":"sucess", 
-                "data":movimientos}
+                    "data":movimientos}
         return jsonify(respuesta)
     except:
         respuesta = { "status": "fail",
-                    "mensaje": "Mesnsaje de error/movimientos "
+                    "mensaje": "Error en base de datos "
         }
         return jsonify(respuesta,400)
 
@@ -35,7 +35,7 @@ def cambio(from_moneda,to_moneda):
         return jsonify(respuesta)
     except:
         respuesta = {"status":"fail", 
-                     "mensaje":"Mensaje de error"}
+                     "mensaje":"Error en la consulta"}
         return(respuesta,400)
 
 @app.route("/api/v1/movimiento", methods = ["POST"])
@@ -47,16 +47,21 @@ def inserta():
                                 request.json.get("from_cantidad"),
                                 request.json.get("to_moneda"),
                                 request.json.get("to_cantidad"),
-                                request.json.get("from_cantidad_actual"),
-                                request.json.get("precio_unitario"))
+                                request.json.get("from_cantidad_actual"),)
+        #print(movimiento)
+
+        #mvm = dao.get(movimiento)
         dao.insert(movimiento)
         respuesta = {"status": "sucess",
+                     "mensaje": "Compra realizada con éxito",
                      "id": "<nuevo id creado>"}
+        print("SOY EL MOVIMIENTO",movimiento)
+        print("SOY RESPUESTA", respuesta)
         return jsonify(respuesta,201)
     except ValueError as e:
         respuesta ={
             "status": "fail",
-            "mensaje": str(e)
+            "mensaje":  str(e)
         }
         return jsonify(respuesta,200)
     except sqlite3.Error as e:

@@ -4,7 +4,7 @@ from datetime import datetime
 MONEDAS = {"EUR","ETH","BNB","ADA","DOT","BTC","USDT","XRP","SOL","MATIC"}
 
 class Movimiento:
-    def __init__(self,fecha,hora,from_moneda,from_cantidad,to_moneda,to_cantidad,from_cantidad_actual,precio_unitario, id = None):
+    def __init__(self,fecha,hora,from_moneda,from_cantidad,to_moneda,to_cantidad,from_cantidad_actual, id = None):
         
         self.id = id
         self.fecha = fecha
@@ -63,6 +63,7 @@ class MovimientoDAOsqlite:
         con = sqlite3.connect(self.path)
         cur = con.cursor()
         cur.execute(query,(movimiento.fecha, movimiento.hora,movimiento.from_moneda,movimiento.from_cantidad,movimiento.to_moneda,movimiento.to_cantidad))
+        print("sE ESTA INSERTANDO")
         con.commit()
         con.close()
 
@@ -87,6 +88,7 @@ class MovimientoDAOsqlite:
             FROM movimientos
             ORDER by id;
             """
+        
         con = sqlite3.connect(self.path)
         cur = con.cursor()
         cur.execute(query)
@@ -104,6 +106,7 @@ class MovimientoDAOsqlite:
                     "id":reg[6]
                 }
             )
+        print(lista)
         con.close()
         
         return lista

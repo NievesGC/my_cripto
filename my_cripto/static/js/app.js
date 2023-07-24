@@ -60,9 +60,9 @@ function consulta(){
     
     fetch(`/api/v1/tasa/${f_moneda}/${t_moneda}?from_cantidad=${f_cantidad}`)
         .then(convert_to_json)
-        .then(function (rate) { 
+        .then(function (rate) {            
             muestraConsulta(rate)
-                .then(function (rate) {
+                .then(function () {
                     let btnAceptar = document.querySelector("#submit");
                     btnAceptar.addEventListener("click", function (event) {
                         event.preventDefault();
@@ -90,8 +90,8 @@ function muestraConsulta(rate){
             rate_num = parseFloat(rate.rate.rate);
             let precioUnitario = parseFloat(rate.rate.precio_unitario);
         
-            pCantidadTo.innerHTML = "Cantidad: " + rate_num.toFixed(15);
-            pPrecioUnitario.innerHTML = "Precio unitario: " + precioUnitario.toFixed(15);
+            pCantidadTo.innerHTML =  rate_num.toFixed(10);
+            pPrecioUnitario.innerHTML =  precioUnitario.toFixed(10);
             
             the_father.appendChild(pCantidadTo);
             the_father.appendChild(pPrecioUnitario);
@@ -99,7 +99,7 @@ function muestraConsulta(rate){
             resolve(rate)
         } else{
             alert("Se ha prodcido el error:" + rate.mensaje)
-            reject("Error en muestraConsulta");
+            reject("Error en la consulta");
         }
     });
 }
@@ -116,7 +116,8 @@ function guardarMovimiento(rate){
     let from_cantidad_actual = document.querySelector("#from_cantidad").value;
     let to_moneda = document.querySelector("#to_moneda").value;
     let to_cantidad = document.querySelector("#to_cantidad").textContent;
-    let from_cantidad = rate.rate.from_cantidad
+    let from_cantidad = JSON.stringify(rate.rate.from_cantidad);
+
     let data = {"fecha": fecha,
                 "hora": hora,
                 "from_moneda": from_moneda,
@@ -133,21 +134,36 @@ function guardarMovimiento(rate){
         }
     };
     
+    
     fetch("/api/v1/movimiento",options)
         .then(convert_to_json)
         .then(inserta)
         .catch(process_error)
-        
+            
 }
 
-function inserta(data){
-    
-    fetch("/api/v1/movimientos")
+function inserta(respuesta){
+
+    /*let options ={
+        body: JSON.stringify(respuesta),
+        method: "GET",
+        headers: {
+            "Content-Type":"application/json"
+        }
+
+    }*/
+    let resp = respuesta[0]
+    if (resp && resp.status === "sucess"){
+        alert(resp.mensaje)
+        fetch("/api/v1/movimientos")
         .then(convert_to_json)
         .then(muestraTodos)
-        .catch(process_error)
-   
-    
+        .catch(process_error) 
+    } else {
+        alert(resp.mensaje)
+    }
+
+      
 }
 
 window.onload = function(){
