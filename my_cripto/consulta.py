@@ -25,21 +25,39 @@ def get_to_cantidad(data):
 
 
 
-def lista(data):
-    monedas_from = []
-    
+def get_info_divisa(data):
+    info_divisa ={}
     for fila in data:
-        divisa = data.from_moneda
-        monedas_from.append(divisa)
+        if fila.to_moneda not in  info_divisa:
+            info_divisa[fila.to_moneda]={"balance":0}
+        cantidad_to_fila= fila.to_cantidad
+        info_divisa[fila['to_moneda']]["balance"]+=cantidad_to_fila
+        
+        if fila.from_moneda not in  info_divisa:
+            info_divisa[fila.from_moneda]={"balance":0}
+        cantidad_from_fila= fila.from_cantidad
+        info_divisa[fila['from_moneda']]["balance"]-=cantidad_from_fila
+    return info_divisa
+      
+def get_data_status(data):
+    url = f"https://rest.coinapi.io/v1/exchangerate/{EUR}/?apikey={apikey}"
+    info_divisa = get_info_divisa(data)
+    valores = {"ETH":0,"BNB":0,"ADA":0,"DOT":0,"BTC":0,"USDT":0,"XRP":0,"SOL":0,"MATIC":0}
+    respuesta = requests.get(url)
+    for rates in respuesta:
+        if rates.asset_id_quote in valores:
+            valor = rates.rate
+            valores[rates["asset_id_quote"]] = valor
+
+    for moneda in info_divisa:
+        if moneda in valores:
+            actual_value = 0
+            value = moneda.balance * valores[moneda]
+            info_divisa[moneda]={"valor":value}
+            actual_value+=info_divisa[moneda]
     
-    
-    
-    
-    
-    
-    
-    monedas_to =[]
-    cantidad_from=[]
-    cantidad_to=[]
-    
-    saldos=[]
+
+
+    return{"status":"sucess",
+            "data": info_divisa,
+            "actual_value":actual_value}
