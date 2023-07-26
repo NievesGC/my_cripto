@@ -125,11 +125,11 @@ function guardarMovimiento(rate){
         }
     };
     
-    
-    fetch("/api/v1/movimiento",options)
-        .then(convert_to_json)
-        .then(inserta)
-        .catch(process_error)
+    if (rate.monedas.includes(rate.rate.from_moneda))
+        fetch("/api/v1/movimiento",options)
+            .then(convert_to_json)
+            .then(inserta)
+            .catch(process_error)
             
 }
 
@@ -208,6 +208,11 @@ window.onload = function(){
         .then(convert_to_json)
         .then(muestraTodos)
         .catch(process_error)
+
+    fetch("/api/v1/status")
+    .then(convert_to_json)
+    .then(muestraStatus)
+    .catch(process_error)
     
 
     let btnCompra = document.querySelector("#btnCompra")
@@ -252,31 +257,29 @@ window.onload = function(){
     )
     
     
-    let btnStatus = document.querySelector("#btnStatus","#recalcular")
+    let btnStatus = document.querySelector("#btnStatus")
     btnStatus.addEventListener("click", function(event){
         event.preventDefault();
         let formularioStatus = document.querySelector("#estado_inversion")
         formularioStatus.classList.remove("invisible")
-        fetch("/api/v1/status")
-            .then(convert_to_json)
-            .then(muestraStatus)
-            .catch(process_error)
         
-            let btnRecalcular = document.querySelector("#recalcular");
-                btnRecalcular.addEventListener("click",function(event){
-                    event.preventDefault();
-                    formularioStatus = document.querySelector("#estado_inversion")
-                    fetch("/api/v1/status")
-                        .then(convert_to_json)
-                        .then(muestraStatus)
-                        .catch(process_error)                   
-                })
+        
+            
             
 
 
     })
 
-    
+    let btnRecalcular = document.querySelector("#recalcular");
+                btnRecalcular.addEventListener("click",function(event){
+                    event.preventDefault();
+                    
+                    //formularioStatus = document.querySelector("#estado_inversion")
+                    fetch("/api/v1/status")
+                        .then(convert_to_json)
+                        .then(muestraStatus)
+                        .catch(process_error)             
+                })
 
     
     

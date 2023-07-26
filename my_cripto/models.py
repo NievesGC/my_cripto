@@ -4,8 +4,8 @@ from datetime import datetime
 MONEDAS = {"EUR","ETH","BNB","ADA","DOT","BTC","USDT","XRP","SOL","MATIC"}
 
 class Movimiento:
-    def __init__(self,fecha,hora,from_moneda,from_cantidad,to_moneda,to_cantidad,from_cantidad_actual, id = None):
-        
+    def __init__(self,fecha,hora,from_moneda,from_cantidad,to_moneda,to_cantidad,from_cantidad_actual,info_divisa, id = None):
+        self.info_divisa = info_divisa
         self.id = id
         self.fecha = fecha
         self.hora = hora
@@ -16,9 +16,39 @@ class Movimiento:
 
         self.from_cantidad_actual = from_cantidad_actual
         
+
+    
+    @property
+    def from_cantidad_actual(self):
+        return self._from_cantidad_actual
+    
+    @from_cantidad_actual.setter
+    def from_cantidad_actual(self,value):
+        self._from_cantidad_actual = float(value)
+        if self._from_cantidad_actual != self.from_cantidad:
+            raise ValueError("El valor de la cantidad a invertir ha variado, pero no ha calculado de nuevo.")
+    @property
+    def to_moneda(self):
+        return self._to_moneda
+    
+    @to_moneda.setter
+    def to_moneda(self,value):
+        self._to_moneda = value
+        if self._to_moneda == self.from_moneda:
+            raise ValueError("La moneda en la que vas invertir no puede coincidir con la moneda origen")
+
+    @property
+    def from_cantidad(self):
+        return self._from_cantidad
+    
+    @from_cantidad.setter
+    def from_cantidad(self,value):
+        self._from_cantidad = float(value)
+        if self.info_divisa[self.from_moneda]['balance'] <= self._from_cantidad and self.from_moneda != "EUR" :
+            raise ValueError("Saldo insuficiente")
     
     def __eq__(self,other):
-        return self.fecha == other.fecha and self.hora == other.hora and self.from_moneda == other.from_moneda and self.from_cantidad == other.from_cantidad and self.to_moneda == other.to_moneda and self.to_cantidad == other.to_cantidad
+        return self.fecha == other.fecha and self.hora == other.hora and self.from_moneda == other.from_moneda and self.from_cantidad == other.from_cantidad and self.to_moneda == other.to_moneda and self.to_cantidad == other.to_cantidad 
     
     def to_dict(self):
         return{
@@ -62,8 +92,7 @@ class MovimientoDAOsqlite:
 
         con = sqlite3.connect(self.path)
         cur = con.cursor()
-        cur.execute(query,(movimiento.fecha, movimiento.hora,movimiento.from_moneda,movimiento.from_cantidad,movimiento.to_moneda,movimiento.to_cantidad))
-        print("sE ESTA INSERTANDO")
+        cur.execute(query,(movimiento.fecha, movimiento.hora,movimiento.from_moneda,movimiento.from_cantidad,movimiento.to_moneda,movimiento.to_cantidad ))
         con.commit()
         con.close()
 
@@ -106,7 +135,7 @@ class MovimientoDAOsqlite:
                     "id":reg[6]
                 }
             )
-        print(lista)
+        
         con.close()
         
         return lista

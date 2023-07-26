@@ -1,6 +1,6 @@
 import requests
 
-apikey = "1B731114-B858-433E-89F1-A792584BE95B"
+apikey = "EA62F2A0-9E85-438E-91B1-F2967C9A56EB"
 
 
 
@@ -27,6 +27,7 @@ def get_to_cantidad(data):
 
 def get_info_divisa(data):
     info_divisa ={}
+    
     for fila in data:
         if fila["to_moneda"] not in  info_divisa:
             info_divisa[fila["to_moneda"]]={"balance":0}
@@ -41,7 +42,7 @@ def get_info_divisa(data):
       
 def get_data_status(data):
     url = f"https://rest.coinapi.io/v1/exchangerate/EUR/?apikey={apikey}"
-    info_divisa = get_info_divisa(data)
+    info_divisa= get_info_divisa(data)
     valores = {"ETH":0,"BNB":0,"ADA":0,"DOT":0,"BTC":0,"USDT":0,"XRP":0,"SOL":0,"MATIC":0,"EUR":1}
     price = 0
     response = requests.get(url)
