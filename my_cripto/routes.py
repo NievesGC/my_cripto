@@ -31,14 +31,14 @@ def cambio(from_moneda,to_moneda):
         data = {"from_moneda": from_moneda, "to_moneda": to_moneda, "from_cantidad" : from_cantidad}
         rate = consulta.get_to_cantidad(data)
         info_divisa = consulta.get_info_divisa(dao.get_all())
-        monedas = list(info_divisa.keys())
+        monedas = list(info_divisa.keys()),
         respuesta = {"status": "sucess", 
                      "rate":rate,
                      "monedas":monedas}
         return jsonify(respuesta)
     except:
         respuesta = {"status":"fail", 
-                     "mensaje":"Error en la consulta de tasa"}
+                     "mensaje":"Error en la consulta"}
         return(respuesta,400)
 
 @app.route("/api/v1/movimiento", methods = ["POST"])
@@ -58,7 +58,8 @@ def inserta():
         dao.insert(movimiento)
         respuesta = {"status": "sucess",
                      "mensaje": "Compra realizada con éxito",
-                     "id": "<nuevo id creado>"}
+                     "id": "<nuevo id creado>",
+                     "monedas": info_divisa}
         return jsonify(respuesta,201)
     except ValueError as e:
         respuesta ={

@@ -38,6 +38,7 @@ def get_info_divisa(data):
             info_divisa[fila["from_moneda"]]={"balance":0}
         cantidad_from_fila= fila["from_cantidad"]
         info_divisa[fila['from_moneda']]["balance"]-=cantidad_from_fila
+    
     return info_divisa
       
 def get_data_status(data):

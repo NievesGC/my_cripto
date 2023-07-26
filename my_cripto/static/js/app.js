@@ -125,11 +125,15 @@ function guardarMovimiento(rate){
         }
     };
     
-    if (rate.monedas.includes(rate.rate.from_moneda))
+    if (rate.monedas[0].includes(rate.rate.from_moneda) || rate.rate.from_moneda == 'EUR' ){
         fetch("/api/v1/movimiento",options)
             .then(convert_to_json)
             .then(inserta)
             .catch(process_error)
+    }else{
+        alert("Saldo insuficiente")
+    }
+        
             
 }
 
@@ -209,10 +213,7 @@ window.onload = function(){
         .then(muestraTodos)
         .catch(process_error)
 
-    fetch("/api/v1/status")
-    .then(convert_to_json)
-    .then(muestraStatus)
-    .catch(process_error)
+    
     
 
     let btnCompra = document.querySelector("#btnCompra")
@@ -262,7 +263,10 @@ window.onload = function(){
         event.preventDefault();
         let formularioStatus = document.querySelector("#estado_inversion")
         formularioStatus.classList.remove("invisible")
-        
+        fetch("/api/v1/status")
+            .then(convert_to_json)
+            .then(muestraStatus)
+            .catch(process_error)
         
             
             
@@ -270,17 +274,15 @@ window.onload = function(){
 
     })
 
+    
     let btnRecalcular = document.querySelector("#recalcular");
-                btnRecalcular.addEventListener("click",function(event){
-                    event.preventDefault();
-                    
-                    //formularioStatus = document.querySelector("#estado_inversion")
-                    fetch("/api/v1/status")
-                        .then(convert_to_json)
-                        .then(muestraStatus)
-                        .catch(process_error)             
-                })
-
-    
-    
+    btnRecalcular.addEventListener("click",function(event){
+        event.preventDefault();
+        
+        //formularioStatus = document.querySelector("#estado_inversion")
+        fetch("/api/v1/status")
+            .then(convert_to_json)
+            .then(muestraStatus)
+            .catch(process_error)             
+    })
 }

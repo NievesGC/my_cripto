@@ -44,8 +44,9 @@ class Movimiento:
     @from_cantidad.setter
     def from_cantidad(self,value):
         self._from_cantidad = float(value)
-        if self.info_divisa[self.from_moneda]['balance'] <= self._from_cantidad and self.from_moneda != "EUR" :
-            raise ValueError("Saldo insuficiente")
+        if self.from_moneda != "EUR":
+            if self.info_divisa[self.from_moneda]['balance'] <= self._from_cantidad  :
+                raise ValueError("Saldo insuficiente")
     
     def __eq__(self,other):
         return self.fecha == other.fecha and self.hora == other.hora and self.from_moneda == other.from_moneda and self.from_cantidad == other.from_cantidad and self.to_moneda == other.to_moneda and self.to_cantidad == other.to_cantidad 
