@@ -1,4 +1,5 @@
 let saveRate;
+let saveWallet;
 
 function appendCell(row,data){
     let the_cell = document.createElement("td")
@@ -165,30 +166,31 @@ function muestraStatus(wallet){
         //muesta valor actual
 
         let the_father_va = document.querySelector("#valor_actual")
+        the_father_va.innerHTML = ""
         let spanValor = document.createElement("span")
-        //the_father_va.innerHTML = ""
         let valorActual = wallet.data.actual_value
         spanValor.innerHTML = valorActual
         the_father_va.appendChild(spanValor)
-        the_father_va.firstChild.textContent = "Valor actual: "
+        //the_father_va.firstChild.textContent = "Valor actual: "
         
         // muesta precio
         let the_father_pre = document.querySelector("#precio")
-        //the_father_pre.innerHTML = ""
+        the_father_pre.innerHTML = ""
         let spanPrecio = document.createElement("span")
         let precio = wallet.data.price
         spanPrecio.innerHTML = precio
         the_father_pre.appendChild(spanPrecio)
-        the_father_pre.firstChild.textContent = "Precio: "
+        //the_father_pre.firstChild.textContent = "Precio: "
 
         // muesta resultado
         let the_father_re = document.querySelector("#resultado")
-        //the_father_re.innerHTML = ""
+        the_father_re.innerHTML = ""
         let spanResultado = document.createElement("span")
         let resultado = (wallet.data.actual_value + wallet.data.price)
         spanResultado.innerHTML = resultado
         the_father_re.appendChild(spanResultado)
-        the_father_re.firstChild.textContent = "Resultado: "
+        //the_father_re.firstChild.textContent = "Resultado: "
+        saveWallet = wallet
     }else{
         alert("Se ha producido el error: " + wallet.mensaje)
     }
@@ -209,11 +211,12 @@ window.onload = function(){
     
 
     let btnCompra = document.querySelector("#btnCompra")
-    
+    let contadorCompra = 0
     btnCompra.addEventListener("click", function(event){
         event.preventDefault()
 
-        let formulario = document.querySelector("#tasa_intercambio")
+        if (contadorCompra == 0){
+            let formulario = document.querySelector("#tasa_intercambio")
             formulario.classList.remove("invisible")
 
         let btnCalcular =document.querySelector("#calcular")
@@ -228,13 +231,20 @@ window.onload = function(){
             event.preventDefault();
             guardarMovimiento(saveRate);
         })
+        contadorCompra = 1
 
+        }else if (contadorCompra==1){
+            document.querySelector("#tasa_intercambio").classList.add("invisible")
+            contadorCompra = 0
         }
+        }
+
+        
         
     )
     
     
-    let btnStatus = document.querySelector("#btnStatus")
+    let btnStatus = document.querySelector("#btnStatus","#recalcular")
     btnStatus.addEventListener("click", function(event){
         event.preventDefault();
         let formularioStatus = document.querySelector("#estado_inversion")
@@ -243,6 +253,17 @@ window.onload = function(){
             .then(convert_to_json)
             .then(muestraStatus)
             .catch(process_error)
+        
+            let btnRecalcular = document.querySelector("#recalcular");
+                btnRecalcular.addEventListener("click",function(event){
+                    event.preventDefault();
+                    formularioStatus = document.querySelector("#estado_inversion")
+                    fetch("/api/v1/status")
+                        .then(convert_to_json)
+                        .then(muestraStatus)
+                        .catch(process_error)                   
+                })
+            
 
 
     })
