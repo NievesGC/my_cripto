@@ -13,6 +13,7 @@
     </header>
     <nav>
         <a href="#" id="btnCompra" role="button">Compra</a>
+        <a href="#" id="btnStatus" role="button">Status</a>
     </nav>
     <section id="tabla_movimientos_d">
         <h1 id = "Lista">Lista de movimientos</h1>
@@ -85,9 +86,24 @@
         
         
     </article>
-    <article id="estado_inversion">
+    <article id="estado_inversion" class="invisible">
         <h1>Estado de la inversion</h1>
-       
+        <table>
+            <thead>
+                <th>Saldo</th>
+                <th>Moneda</th>
+                <th>Cantidad €</th>
+            </thead>
+            <tbody id="tabla_estado_inversion">
+
+            </tbody>
+        </table>
+        <p id="valor_actual">Valor actual: </p>
+        <p id="precio">Precio: </p>
+        <p id="resultado">Resultado:  </p>
+
+        <button id="status">Status</button>
+      
     </article>
 
     <footer>

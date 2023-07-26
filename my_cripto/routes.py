@@ -74,12 +74,15 @@ def inserta():
 
 @app.route("/api/v1/status", methods = ["GET"])
 def status():
-    pass
-    """
-    datos = dao.get_all()
+    try:
+        datos = dao.get_all()
+        data = consulta.get_data_status(datos)
+        respuesta ={"status": "sucess",
+                    "data":data}
+        return jsonify(respuesta)
+    except:
+        respuesta= {"status":"fail",
+                    "mensaje":"Error en consulta"}
         
     
     
-    gestion = " llamo a una funcion para que me deculda los datos que necesito insertar en la tabla"
-
-    return (gestion) "los datos que voy a insertar en status"""

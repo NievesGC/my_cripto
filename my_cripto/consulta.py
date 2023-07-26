@@ -28,36 +28,41 @@ def get_to_cantidad(data):
 def get_info_divisa(data):
     info_divisa ={}
     for fila in data:
-        if fila.to_moneda not in  info_divisa:
-            info_divisa[fila.to_moneda]={"balance":0}
-        cantidad_to_fila= fila.to_cantidad
+        if fila["to_moneda"] not in  info_divisa:
+            info_divisa[fila["to_moneda"]]={"balance":0}
+        cantidad_to_fila= fila["to_cantidad"]
         info_divisa[fila['to_moneda']]["balance"]+=cantidad_to_fila
         
-        if fila.from_moneda not in  info_divisa:
-            info_divisa[fila.from_moneda]={"balance":0}
-        cantidad_from_fila= fila.from_cantidad
+        if fila["from_moneda"] not in  info_divisa:
+            info_divisa[fila["from_moneda"]]={"balance":0}
+        cantidad_from_fila= fila["from_cantidad"]
         info_divisa[fila['from_moneda']]["balance"]-=cantidad_from_fila
     return info_divisa
       
 def get_data_status(data):
-    url = f"https://rest.coinapi.io/v1/exchangerate/{EUR}/?apikey={apikey}"
+    url = f"https://rest.coinapi.io/v1/exchangerate/EUR/?apikey={apikey}"
     info_divisa = get_info_divisa(data)
-    valores = {"ETH":0,"BNB":0,"ADA":0,"DOT":0,"BTC":0,"USDT":0,"XRP":0,"SOL":0,"MATIC":0}
-    respuesta = requests.get(url)
-    for rates in respuesta:
-        if rates.asset_id_quote in valores:
-            valor = rates.rate
+    valores = {"ETH":0,"BNB":0,"ADA":0,"DOT":0,"BTC":0,"USDT":0,"XRP":0,"SOL":0,"MATIC":0,"EUR":1}
+    price = 0
+    response = requests.get(url)
+    respuesta = response.json()
+    for rates in respuesta["rates"]:
+        if rates["asset_id_quote"] in valores:
+            valor = rates["rate"]
             valores[rates["asset_id_quote"]] = valor
-
+    actual_value = 0
     for moneda in info_divisa:
         if moneda in valores:
-            actual_value = 0
-            value = moneda.balance * valores[moneda]
-            info_divisa[moneda]={"valor":value}
-            actual_value+=info_divisa[moneda]
+            
+            value_eur = info_divisa[moneda]["balance"] / valores[moneda]
+            info_divisa[moneda]["valor"]=value_eur
+            if moneda != 'EUR':
+                actual_value+=value_eur
+            else:
+                price=value_eur
     
 
 
-    return{"status":"sucess",
-            "data": info_divisa,
+    return {"wallet": info_divisa,
+            "price": price,
             "actual_value":actual_value}

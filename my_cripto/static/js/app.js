@@ -2,9 +2,7 @@ let saveRate;
 
 function appendCell(row,data){
     let the_cell = document.createElement("td")
-    //the_father.innerHTML=""
     the_cell.innerHTML = data
-    //the_father.innerHTML=""
     row.appendChild(the_cell)
 }
 
@@ -40,6 +38,7 @@ function convert_to_json(registro){
 function process_error(error){
     alert("Se ha producido el error :" + error)
 }
+
 function consulta(){
     let f_moneda = document.querySelector("#from_moneda").value;
     
@@ -97,8 +96,6 @@ function muestraConsulta(rate){
     });
 }
 
-
-
 function guardarMovimiento(rate){
     let fecha = new Date().toISOString().slice(0,10);
     let fechaHora = new Date()
@@ -151,6 +148,57 @@ function inserta(respuesta){
       
 }
 
+function muestraStatus(wallet){
+
+    if (wallet.status == "sucess"){
+        //muestra la tabla de saldos
+        let the_father = document.querySelector("#tabla_estado_inversion")
+        the_father.innerHTML = ""
+
+        for (divisa in  wallet.data.wallet) {
+            let the_row = document.createElement("tr")
+            the_father.appendChild(the_row)
+            appendCell(the_row,wallet.data.wallet[divisa].balance)
+            appendCell(the_row,divisa)
+            appendCell(the_row,wallet.data.wallet[divisa].valor)
+        }
+        //muesta valor actual
+
+        let the_father_va = document.querySelector("#valor_actual")
+        let spanValor = document.createElement("span")
+        //the_father_va.innerHTML = ""
+        let valorActual = wallet.data.actual_value
+        spanValor.innerHTML = valorActual
+        the_father_va.appendChild(spanValor)
+        the_father_va.firstChild.textContent = "Valor actual: "
+        
+        // muesta precio
+        let the_father_pre = document.querySelector("#precio")
+        //the_father_pre.innerHTML = ""
+        let spanPrecio = document.createElement("span")
+        let precio = wallet.data.price
+        spanPrecio.innerHTML = precio
+        the_father_pre.appendChild(spanPrecio)
+        the_father_pre.firstChild.textContent = "Precio: "
+
+        // muesta resultado
+        let the_father_re = document.querySelector("#resultado")
+        //the_father_re.innerHTML = ""
+        let spanResultado = document.createElement("span")
+        let resultado = (wallet.data.actual_value + wallet.data.price)
+        spanResultado.innerHTML = resultado
+        the_father_re.appendChild(spanResultado)
+        the_father_re.firstChild.textContent = "Resultado: "
+    }else{
+        alert("Se ha producido el error: " + wallet.mensaje)
+    }
+        
+        
+}
+    
+    
+    
+
 
 window.onload = function(){
 
@@ -184,6 +232,20 @@ window.onload = function(){
         }
         
     )
+    
+    
+    let btnStatus = document.querySelector("#btnStatus")
+    btnStatus.addEventListener("click", function(event){
+        event.preventDefault();
+        let formularioStatus = document.querySelector("#estado_inversion")
+        formularioStatus.classList.remove("invisible")
+        fetch("/api/v1/status")
+            .then(convert_to_json)
+            .then(muestraStatus)
+            .catch(process_error)
+
+
+    })
 
     
 
