@@ -237,8 +237,16 @@ window.onload = function(){
             document.querySelector("#tasa_intercambio").classList.add("invisible")
             contadorCompra = 0
         }
-        }
+        
+        let btnCerrar =document.querySelector("#cerrar")
+        btnCerrar.addEventListener("click", function(event){
+            event.preventDefault()
+            document.querySelector("#tasa_intercambio").classList.add("invisible")
+            contadorCompra = 0
+        })
 
+
+        }  
         
         
     )
