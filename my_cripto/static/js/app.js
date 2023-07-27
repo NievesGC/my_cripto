@@ -88,7 +88,7 @@ function muestraConsulta(rate){
             let precioUnitario = parseFloat(rate.rate.precio_unitario);
         
             pCantidadTo.innerHTML =  rate_num.toFixed(10);
-            pPrecioUnitario.innerHTML =  precioUnitario.toFixed(10);
+            pPrecioUnitario.innerHTML = "Precio unitario: " + precioUnitario.toFixed(10);
             
             the_father.appendChild(pCantidadTo);
             the_father.appendChild(pPrecioUnitario);
