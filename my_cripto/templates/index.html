@@ -11,28 +11,35 @@
     <header>
         <p>CriptoSnow</p>
     </header>
-    <nav>
-        <a href="#" id="btnCompra" role="button">Compra</a>
-        <a href="#" id="btnStatus" role="button">Status</a>
-    </nav>
-    <section id="tabla_movimientos_d">
-        <h1 id = "Lista">Lista de movimientos</h1>
-        <table>
-            <thead>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>From</th>
-                <th>Cantidad</th>
-                <th>To</th>
-                <th>Cantidad</th>
-            </thead>
-            <tbody id="tabla_movimientos">
-
-            </tbody>
+    <div id="general">
+        <nav>
+            <a href="#" id="btnCompra" role="button">Compra</a>
+            <a href="#" id="btnStatus" role="button">Status</a>
+        </nav>
+       
+       
+        <section id="lista_de_movimientos">
+            <h1 id = "Lista">Lista de movimientos</h1>
+            <table>
+                <thead>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>From</th>
+                    <th>Cantidad</th>
+                    <th>To</th>
+                    <th>Cantidad</th>
+                </thead>
+                <tbody id="tabla_movimientos">
+    
+                </tbody>
+                
+            </table>
             
-        </table>
-        <article id="estado_inversion" class="invisible">
+        </section>
+        <section id="estado_inversion" class="invisible">
+            
             <h1>Estado de la inversion</h1>
+            
             <table>
                 <thead>
                     <th>Saldo</th>
@@ -43,18 +50,18 @@
     
                 </tbody>
             </table>
-            <p id="valor_actual">Valor actual: </p>
-            <p id="precio">Precio: </p>
-            <p id="resultado">Resultado:  </p>
+            <p>Valor actual:</p><p id="valor_actual"> </p>
+            <p>Precio: </p><p id="precio"></p>
+            <p>Resultado:</p><p id="resultado">  </p>
     
             <button id="recalcular">Recalcular</button>
-          
-        </article>
-    </section id = "tpv">
-    <article id="tasa_intercambio" class="invisible">
-        <h1 id = "tpv">TPV</h1>
-
-        <form>
+              
+        </section>
+        <section id="tasa_intercambio" class="invisible">
+        
+            <h1 id = "tpv">TPV</h1>
+    
+            
             <div id="from">
                 <label for="from_moneda_from">From:</label>
                 <select name="from_moneda" id="from_moneda" placeholder="From">
@@ -72,11 +79,10 @@
                 <label for="from_cantidad_input">Cantidad:</label>
                 <input type="number" name="from_cantidad" id="from_cantidad" step="0.0000000001" placeholder="Cantidad">
                 <button id="calcular">Calcular</button>
-                <button id="cerrar">Cerrar</button>
+                
             </div>
             
-        </form>
-        <form>
+        
             <div id="to" >
                 
                 <label for="to_moneda_select">To:</label>
@@ -98,16 +104,18 @@
                 
                 
             </div>
-            <div>
-                <input type="submit" name="submit" id="submit" value="Aceptar">
+            <div id="botones_tpv">
+                <input type="submit" name="submit" id="submit" value="Comprar">
+                <button id="cerrar">Cerrar</button> 
             </div>
-        </form>
-    
+            
         
-        
-    </article>
-    
+        </section>    
 
+    </div>
+    
+        
+    
     <footer>
         <p class=>&copy; 2023 - Nieves Gómez</p>
     </footer>

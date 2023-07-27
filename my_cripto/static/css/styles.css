@@ -1,9 +1,22 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+#general{
+    margin: auto;
+    margin-top: 50px;
+    width: 2000px;
+    height: 1700px;
+    background: color 0;
+}
+
+
 body{
-    background-color: rgb(250, 250, 250);
+    background-color: rgb(255, 255, 255);
 }
 
 header , footer{
-    background-color: rgb(114, 77, 188);
+    background-color: rgb(147, 168, 237);
 }
 
 header p{
@@ -21,47 +34,85 @@ footer p{
 }
 
 #lista{
-    color: rgb(1, 1, 1);
-    font-weight:lighter;
-    font-size: 40px;
+    
     text-align: center;
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    
 }
+
 
 #tabla_movimientos {
     margin-top: 30px;
     border-style: outset;
-    border: 5px solid rgb(121, 44, 180);
+    border: 5px solid rgb(44, 101, 180);
     border-radius: 5px;
   }
 
-#tpv{
-    color: rgb(1, 1, 1);
-    font-weight:lighter;
-    font-size: 40px;
+#tpv{  
     text-align: center;
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#lista_de_movimientos{
+    padding-top: 10px;
+    padding-left: 10px;
+    margin-left: 10px;
+    margin-top: 30px;
+    position: relative;
+    float: left;
+    width: 45%;
+    height: auto;
+    background-color: aliceblue;
+}
+
+#estado_inversion{
+    text-align: center;
+    float: right;
+    width: 900px;
+    height: 750px;
+    margin-top: 30px;
+    background-color: aliceblue;
+    
+}
+#tasa_intercambio{
+    margin: auto;
+    margin-top: 1000px;
+    width: 2000px;
+    height: 700px;
+    background-color: aliceblue;
 
 }
 
 
 #from {
-    width: 500px;
-    padding: 10px;
-    border: 5px solid rgb(11, 11, 11);
-    margin: 10px;
+    padding-top: 10px;
+    padding-left: 100px;
+    margin-left: 10px;
+    position: relative;
+    float: left;
+    width: 45%;
+    height: auto;
 }
 
 #to {
     
-    width: 500px;
-    padding: 10px;
-    border: 5px solid rgb(11, 11, 11);
-    margin: 10px;
+    padding-left: 10px;
+    padding-top: 100px;
+    margin-left: 57px;
+    float: left;
+    position: relative;
+    width: 45%;
+    height: auto;
 }
+
+#botones_tpv{
+    margin: auto;
+    margin-top: 50px;
+    width: 1800px;
+    height: 200px;
+    
+}
+
+
 
 .invisible{
     display: none;
 }
-
-
