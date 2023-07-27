@@ -1,6 +1,11 @@
+from my_cripto import app
 import requests
+from flask import Flask
 
-apikey = "EA62F2A0-9E85-438E-91B1-F2967C9A56EB"
+
+
+apikey = app.config["SECRET_KEY"]
+
 
 
 
@@ -21,7 +26,7 @@ def get_to_cantidad(data):
                     "rate":to_cantidad,
                     "precio_unitario":precio_unitario}
     except:
-        return response.status_code, "-",respuesta["error"] #esto no va
+        return response.status_code, "-",respuesta["error"] 
 
 
 

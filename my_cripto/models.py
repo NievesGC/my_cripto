@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime
 
-MONEDAS = {"EUR","ETH","BNB","ADA","DOT","BTC","USDT","XRP","SOL","MATIC"}
+
 
 class Movimiento:
     def __init__(self,fecha,hora,from_moneda,from_cantidad,to_moneda,to_cantidad,from_cantidad_actual,info_divisa, id = None):
@@ -26,7 +26,7 @@ class Movimiento:
     def from_cantidad_actual(self,value):
         self._from_cantidad_actual = float(value)
         if self._from_cantidad_actual != self.from_cantidad:
-            raise ValueError("El valor de la cantidad a invertir ha variado, pero no ha calculado de nuevo.")
+            raise ValueError("¡Oh no!, parece que ha cambiado la cantidad a invertir, si quiere continuar con la compra recalcule o ingrese la cantidad inicial.")
     @property
     def to_moneda(self):
         return self._to_moneda
@@ -35,7 +35,7 @@ class Movimiento:
     def to_moneda(self,value):
         self._to_moneda = value
         if self._to_moneda == self.from_moneda:
-            raise ValueError("La moneda en la que vas invertir no puede coincidir con la moneda origen")
+            raise ValueError(" No puede comprar la misma moneda, para continuar cambie una de las monedas y vuelva a calcular")
 
     @property
     def from_cantidad(self):
@@ -107,7 +107,7 @@ class MovimientoDAOsqlite:
         con = sqlite3.connect(self.path)
         cur = con.cursor()
         cur.execute(query,(id))
-        res = cur.fetchone()  #lee la primera linea necesito este u otro , o me  vale solo con el id¿?¿?¿
+        res = cur.fetchone()  
         con.close()
         if res:
             return Movimiento(*res)

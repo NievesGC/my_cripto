@@ -1,4 +1,4 @@
-let saveRate;
+let saveRate = null;
 let saveWallet;
 
 function appendCell(row,data){
@@ -45,6 +45,10 @@ function consulta(){
     
    
     let f_cantidad = document.querySelector("#from_cantidad").value;
+    if (f_cantidad == ""){
+        alert("Debe introducir una cantidad");
+        return
+    }
     if (isNaN(f_cantidad)){
         alert("Los valores introducidos han de ser numéricos");
         return;
@@ -103,11 +107,11 @@ function guardarMovimiento(rate){
     let horas = fechaHora.getHours();
     let minutos = fechaHora.getMinutes();
     let hora =`${horas}:${minutos}`;
-    let from_moneda = document.querySelector("#from_moneda").value;
+    let from_moneda = rate.rate.from_moneda;
     let from_cantidad_actual = document.querySelector("#from_cantidad").value;
-    let to_moneda = document.querySelector("#to_moneda").value;
+    let to_moneda = rate.rate.to_moneda;
     let to_cantidad = document.querySelector("#to_cantidad").textContent;
-    let from_cantidad = JSON.stringify(rate.rate.from_cantidad);
+    let from_cantidad = rate.rate.from_cantidad;
 
     let data = {"fecha": fecha,
                 "hora": hora,
@@ -143,9 +147,9 @@ function inserta(respuesta){
     if (resp && resp.status === "sucess"){
         alert(resp.mensaje)
         fetch("/api/v1/movimientos")
-        .then(convert_to_json)
-        .then(muestraTodos)
-        .catch(process_error) 
+            .then(convert_to_json)
+            .then(muestraTodos)
+            .catch(process_error) 
     } else {
         alert(resp.mensaje)
     }
@@ -156,18 +160,19 @@ function inserta(respuesta){
 function muestraStatus(wallet){
 
     if (wallet.status == "sucess"){
-        //muestra la tabla de saldos
         let the_father = document.querySelector("#tabla_estado_inversion")
         the_father.innerHTML = ""
 
         for (divisa in  wallet.data.wallet) {
-            let the_row = document.createElement("tr")
-            the_father.appendChild(the_row)
-            appendCell(the_row,wallet.data.wallet[divisa].balance)
-            appendCell(the_row,divisa)
-            appendCell(the_row,wallet.data.wallet[divisa].valor)
+            if (divisa != "EUR"){
+                let the_row = document.createElement("tr")
+                the_father.appendChild(the_row)
+                appendCell(the_row,wallet.data.wallet[divisa].balance)
+                appendCell(the_row,divisa)
+                appendCell(the_row,wallet.data.wallet[divisa].valor)
+            }         
         }
-        //muesta valor actual
+    
 
         let the_father_va = document.querySelector("#valor_actual")
         the_father_va.innerHTML = ""
@@ -175,25 +180,23 @@ function muestraStatus(wallet){
         let valorActual = wallet.data.actual_value
         spanValor.innerHTML = valorActual
         the_father_va.appendChild(spanValor)
-        //the_father_va.firstChild.textContent = "Valor actual: "
         
-        // muesta precio
+
         let the_father_pre = document.querySelector("#precio")
         the_father_pre.innerHTML = ""
         let spanPrecio = document.createElement("span")
         let precio = wallet.data.price
         spanPrecio.innerHTML = precio
         the_father_pre.appendChild(spanPrecio)
-        //the_father_pre.firstChild.textContent = "Precio: "
+        
 
-        // muesta resultado
         let the_father_re = document.querySelector("#resultado")
         the_father_re.innerHTML = ""
         let spanResultado = document.createElement("span")
         let resultado = (wallet.data.actual_value + wallet.data.price)
         spanResultado.innerHTML = resultado
         the_father_re.appendChild(spanResultado)
-        //the_father_re.firstChild.textContent = "Resultado: "
+        
         saveWallet = wallet
     }else{
         alert("Se ha producido el error: " + wallet.mensaje)
@@ -201,10 +204,7 @@ function muestraStatus(wallet){
         
         
 }
-    
-    
-    
-
+       
 
 window.onload = function(){
 
@@ -213,8 +213,6 @@ window.onload = function(){
         .then(muestraTodos)
         .catch(process_error)
 
-    
-    
 
     let btnCompra = document.querySelector("#btnCompra")
     let contadorCompra = 0
@@ -229,13 +227,31 @@ window.onload = function(){
             btnCalcular.addEventListener("click",function(event){
             event.preventDefault();
             consulta();
+            btnAceptar.disabled=false
             
         })
-            
+        let fromMonedaSel =document.querySelector("#from_moneda")
+            fromMonedaSel.addEventListener("change",function(event){
+            event.preventDefault();
+            btnAceptar.disabled=true
+        })
+        let toMonedaSel =document.querySelector("#to_moneda")
+            toMonedaSel.addEventListener("change",function(event){
+            event.preventDefault();
+            btnAceptar.disabled=true
+        })
+        
+        
+
         let btnAceptar = document.querySelector("#submit");
             btnAceptar.addEventListener("click", function (event) {
             event.preventDefault();
-            guardarMovimiento(saveRate);
+            if (saveRate != null){
+                guardarMovimiento(saveRate);
+            }else{
+                alert("Calcula la conversión antes de comprar")
+            }
+            
         })
         contadorCompra = 1
 
@@ -253,33 +269,32 @@ window.onload = function(){
 
 
         }  
-        
-        
     )
     
     
     let btnStatus = document.querySelector("#btnStatus")
+    let contadorStatus = 0
     btnStatus.addEventListener("click", function(event){
         event.preventDefault();
-        let formularioStatus = document.querySelector("#estado_inversion")
-        formularioStatus.classList.remove("invisible")
-        fetch("/api/v1/status")
-            .then(convert_to_json)
-            .then(muestraStatus)
-            .catch(process_error)
-        
-            
-            
-
-
+        if (contadorStatus==0){
+            let formularioStatus = document.querySelector("#estado_inversion")
+            formularioStatus.classList.remove("invisible")
+            fetch("/api/v1/status")
+                .then(convert_to_json)
+                .then(muestraStatus)
+                .catch(process_error)
+        contadorStatus = 1
+        } else if (contadorStatus == 1){
+            document.querySelector("#estado_inversion").classList.add("invisible")
+            contadorStatus = 0
+        }
+    
     })
 
     
     let btnRecalcular = document.querySelector("#recalcular");
     btnRecalcular.addEventListener("click",function(event){
         event.preventDefault();
-        
-        //formularioStatus = document.querySelector("#estado_inversion")
         fetch("/api/v1/status")
             .then(convert_to_json)
             .then(muestraStatus)
