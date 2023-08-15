@@ -65,7 +65,7 @@ Esta aplicación utiliza coinAPI.io como servicio para calcular el valor actual 
 
     - FLASK_API_KEY: la apikey de coinApi.io obtenida más arriba
 
-    - FLASK_DB_PATH: dejar como está
+    - FLASK_PATH_SQLITE: dejar como está
 
 
 

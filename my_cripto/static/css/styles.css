@@ -75,6 +75,7 @@ footer p{
 #tasa_intercambio{
     margin: auto;
     margin-top: 1000px;
+    margin-bottom: 15px;
     width: 2000px;
     height: 700px;
     background-color: aliceblue;
