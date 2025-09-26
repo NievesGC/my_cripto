@@ -75,7 +75,7 @@ Esta aplicación utiliza coinAPI.io como servicio para calcular el valor actual 
 
 ```
 
-pip install -r requirements.txt
+pip install -r requeriments.txt
 
 ```
 

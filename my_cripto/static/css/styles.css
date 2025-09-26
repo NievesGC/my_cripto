@@ -1,7 +1,49 @@
+/* .color1 {color: #120907;}
+.color2 {color: #2a2745;}
+.color3 {color: #635f98;}
+.color4 {color: #a59ae9;}
+.color5 {color: #e7d2ed;} */
+
 *{
+    box-sizing: border-box;
     margin: 0px;
     padding: 0px;
 }
+
+
+/* Diseño de cabecera */
+
+.cabecera{
+    background-color:#a59ae9 ;
+    width: 100vw;
+    height: 30vw; 
+    text-align: center;
+    padding: 3em;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}
+
+.cabecera h1{
+    margin-bottom: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 5em;
+    color:#2a2745; 
+}
+
+/* Diseño nav */
+
+.botones-superiores{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    
+}
+
+
+
+
+
 #general{
     margin: auto;
     margin-top: 50px;
@@ -16,17 +58,17 @@ body{
 }
 
 header , footer{
-    background-color: rgb(147, 168, 237);
+    background-color:#a59ae9 ;
 }
 
-header p{
+/* header h1{
     color: grey;
     font-weight:lighter;
     font-size: 120px;
     text-align: center;
     font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     
-}
+} */
 footer p{
     color: grey;
     font-weight: bold;
@@ -114,6 +156,9 @@ footer p{
 
 
 
+
+
+/* NOOOO TOCAR */
 .invisible{
     display: none;
 }

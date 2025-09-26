@@ -1,303 +1,368 @@
-let saveRate = null;
-let saveWallet;
+// ==================== VARIABLES GLOBALES ====================
+let savedExchangeRate = null;
+let savedWalletData = null;
+let buyFormVisible = false;
+let statusFormVisible = false;
 
-function appendCell(row,data){
-    let the_cell = document.createElement("td")
-    the_cell.innerHTML = data
-    row.appendChild(the_cell)
+// ==================== CONFIGURACIÓN ====================
+const SELECTORS = {
+    // Tablas
+    movementsTable: 'movements-table',
+    statusTable: '#status-table',
+    
+    // Formularios
+    exchangeForm: '#exchange-form',
+    statusContainer: '#status-container',
+    displayContainer: 'display-container',
+    
+    // Inputs
+    fromCurrency: '#from-currency',
+    fromAmount: '#from-amount',
+    toCurrency: '#to-currency',
+    toAmount: '#to-amount',
+    
+    // Botones
+    buyBtn: '#buy-btn',
+    closeBtn: '#close-btn',
+    calculateBtn: '#calculate-btn',
+    submitBtn: '#submit',
+    statusBtn: '#status-btn',
+    recalculateBtn: '#recalculate'
+};
+
+const API_URLS = {
+    movements: '/api/v1/movements',
+    movement: '/api/v1/movement',
+    status: '/api/v1/status',
+    exchangeRate: (from, to, amount) => `/api/v1/tasa/${from}/${to}?from_cantidad=${amount}`
+};
+
+// ==================== FUNCIONES DE UTILIDAD ====================
+function getElement(selector) {
+    return document.querySelector(selector);
 }
 
-function muestraTodos(data){
-    if (data.status == "sucess"){
-        let the_father = document.querySelector("#tabla_movimientos")
-        the_father.innerHTML=""
+function showError(message) {
+    alert("Error: " + message);
+}
 
-        for (let i=0; i < data.data.length; i++){
-            let the_row = document.createElement("tr")
-            
-            the_father.appendChild(the_row)
+function showSuccess(message) {
+    alert(message);
+}
 
-            appendCell(the_row,data.data[i].fecha)
-            appendCell(the_row,data.data[i].hora)
-            appendCell(the_row,data.data[i].from_moneda)
-            appendCell(the_row,data.data[i].from_cantidad)
-            appendCell(the_row,data.data[i].to_moneda)
-            appendCell(the_row,data.data[i].to_cantidad)
+function convertToJson(response) {
+    return response.json();
+}
+
+function getCurrentDateTime() {
+    const now = new Date();
+    const date = now.toISOString().slice(0, 10);
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const time = `${hours}:${minutes}`;
+    return { date, time };
+}
+
+function deleteRate(){
+    const fromCurrencyShow = getElement(SELECTORS.fromCurrency).value="";
+    const fromAmountShow = getElement(SELECTORS.fromAmount).value="";
+    const toCurrencyShow = getElement(SELECTORS.toCurrency).value=""; 
+    const resultAmount = document.getElementById("to-amount").innerText="Cantidad:"; 
+    const resultUnitPrice = document.getElementById("unit_price").innerText="";
+}
+
+// ==================== FUNCIONES DE VALIDACIÓN ====================
+function validateAmount(amount) {
+    if (!amount || amount === "") {
+        showError("Por favor introduzca cantidad.");
+        return false;
+    }
+    if (isNaN(amount)) {
+        showError("La cantidad debe ser un número válido.");
+        return false;
+    }
+    if (parseFloat(amount) <= 0) {
+        showError("La cantidad sebe ser superior a 0.");
+        return false;
+    }
+    return true;
+}
+
+// ==================== FUNCIONES DE RENDERIZADO ====================
+function createTableCell(content) {
+    const cell = document.createElement("td");
+    cell.innerHTML = content;
+    return cell;
+}
+
+
+function displayMovements(data) {
+    const table = document.getElementById(SELECTORS.movementsTable);
+    table.innerHTML = "";
+
+    if (data.status === "success"){
+        for (let i=0; i < data.data.length; i++){ 
+            const row = document.createElement("tr");
             
+            // Agregar cada celda
+            row.appendChild(createTableCell(data.data[i].fecha));
+            row.appendChild(createTableCell(data.data[i].hora));
+            row.appendChild(createTableCell(data.data[i].from_moneda));
+            row.appendChild(createTableCell(data.data[i].from_cantidad));
+            row.appendChild(createTableCell(data.data[i].to_moneda));
+            row.appendChild(createTableCell(data.data[i].to_cantidad));
+            
+            table.appendChild(row);   
         }    
     } else {
-        alert("Se a producido el error: " + data.mensaje)
+        alert( data.mensaje) /*  si  va -- pero no saca data.mensaje  */
     }
      
       
 }
 
-function convert_to_json(registro){
-    return registro.json();
+function displayExchangeRate(exchangeRate) {
+    if (exchangeRate.status === "success") { 
+        const container = document.getElementById(SELECTORS.displayContainer);
+        container.innerHTML = "";
+        
+        const rateValue = parseFloat(exchangeRate.rate.rate);
+        const unitPrice = parseFloat(exchangeRate.rate.precio_unitario);
+        
+        // Crear elementos para mostrar el resultado
+        const amountElement = document.createElement("p");
+        amountElement.id = "to-amount";
+        amountElement.innerHTML = rateValue.toFixed(5);
+        
+        const priceElement = document.createElement("p");
+        priceElement.id = "unit_price";
+        priceElement.innerHTML = "Precio unitario: " + unitPrice.toFixed(5);
+        
+        container.appendChild(amountElement);
+        container.appendChild(priceElement);
+            
+    }else{
+        showError(exchangeRate.mensaje);
+    } 
 }
 
-function process_error(error){
-    alert("Se ha producido el error :" + error)
-}
+function displayWalletStatus(wallet) {
+    if (wallet.status === "success") {
+        // Mostrar tabla de monedas
+        const table = getElement(SELECTORS.statusTable);
+        table.innerHTML = "";
 
-function consulta(){
-    let f_moneda = document.querySelector("#from_moneda").value;
-    
-   
-    let f_cantidad = document.querySelector("#from_cantidad").value;
-    if (f_cantidad == ""){
-        alert("Debe introducir una cantidad");
-        return
-    }
-    if (isNaN(f_cantidad)){
-        alert("Los valores introducidos han de ser numéricos");
-        return;
-    }
-    if (f_cantidad < 0) {
-        alert("La cantidad ha de ser superior a 0");
-        return;
-    }
-    
-    let t_moneda = document.querySelector("#to_moneda").value;
-    
-
-    
-    fetch(`/api/v1/tasa/${f_moneda}/${t_moneda}?from_cantidad=${f_cantidad}`)
-        .then(convert_to_json)
-        .then(function (rate) {  
-            saveRate = rate          
-            muestraConsulta(rate)
-        })
-        .catch(process_error);
-        
-}
-
-function muestraConsulta(rate){
-    return new Promise(function (resolve, reject){
-        if (rate.status == "sucess"){
-            let the_father = document.querySelector("#to_moneda_muestra");
-            the_father.innerHTML=""
-            
-            let pCantidadTo = document.createElement("p");
-            pCantidadTo.id = "to_cantidad";
-        
-            let pPrecioUnitario = document.createElement("p");
-            pPrecioUnitario.id = "precio_unitario";
-        
-            rate_num = parseFloat(rate.rate.rate);
-            let precioUnitario = parseFloat(rate.rate.precio_unitario);
-        
-            pCantidadTo.innerHTML =  rate_num.toFixed(10);
-            pPrecioUnitario.innerHTML = "Precio unitario: " + precioUnitario.toFixed(10);
-            
-            the_father.appendChild(pCantidadTo);
-            the_father.appendChild(pPrecioUnitario);
-            
-            resolve(rate)
-        } else{
-            alert("Se ha prodcido el error:" + rate.mensaje);
-            reject("Error en la consulta");
+        for (const currency in wallet.data.wallet) {
+            if (currency !== "EUR") {
+                const row = document.createElement("tr");
+                row.appendChild(createTableCell(wallet.data.wallet[currency].balance));
+                row.appendChild(createTableCell(currency));
+                row.appendChild(createTableCell(wallet.data.wallet[currency].valor));
+                table.appendChild(row);
+            }
         }
+
+        // Mostrar valores de resumen
+        displaySummaryValue('#valor_actual', wallet.data.actual_value);
+        displaySummaryValue('#precio', wallet.data.price);
+        displaySummaryValue('#resultado', wallet.data.actual_value + wallet.data.price);
+        
+        savedWalletData = wallet;
+        
+    }else{
+        showError(wallet.mensaje);
+    }
+}
+
+function displaySummaryValue(selector, value) {
+    const container = getElement(selector);
+    container.innerHTML = "";
+    const span = document.createElement("span");
+    span.innerHTML = value;
+    container.appendChild(span);
+}
+
+
+
+function calculateExchangeRate() {
+    const fromCurrency = getElement(SELECTORS.fromCurrency).value;
+    const fromAmount = getElement(SELECTORS.fromAmount).value;
+    const toCurrency = getElement(SELECTORS.toCurrency).value;
+    
+    // Validar entrada
+    if (!validateAmount(fromAmount)) {
+        return;
+    }
+    
+    // Hacer petición a la API
+    const url = API_URLS.exchangeRate(fromCurrency, toCurrency, fromAmount);
+    
+    fetch(url)
+        .then(convertToJson)
+        .then(function(exchangeRate) {
+            savedExchangeRate = exchangeRate;
+            displayExchangeRate(exchangeRate);
+            getElement(SELECTORS.submitBtn).disabled = false;
+        })
+        .catch(function(error) {
+            showError(error.message);
+        });
+}
+
+function executeTransaction() {
+    if (!savedExchangeRate) {
+        showError("Por favor, calcula antes de la compra");
+        return;
+    }
+
+    // Verificar saldo suficiente
+    const fromCurrency = savedExchangeRate.rate.from_moneda;
+    const hasSufficientBalance = savedExchangeRate.monedas[0].includes(fromCurrency) || fromCurrency === 'EUR';
+    
+    if (!hasSufficientBalance) {
+        showError("Saldo insuficiente");
+        return;
+    }
+
+    // Preparar datos del movimiento
+    const { date, time } = getCurrentDateTime();
+    const movementData = {
+        fecha: date,
+        hora: time,
+        from_moneda: savedExchangeRate.rate.from_moneda,
+        from_cantidad: savedExchangeRate.rate.from_cantidad,
+        to_moneda: savedExchangeRate.rate.to_moneda,
+        to_cantidad: getElement(SELECTORS.toAmount).textContent,
+        from_cantidad_actual: getElement(SELECTORS.fromAmount).value
+    };
+
+    // Enviar a la API
+    const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(movementData)
+    };
+
+    fetch(API_URLS.movement, options)
+        .then(convertToJson)
+        .then(function(response) {
+            const result = response[0];
+            if (result && result.status === "success") {
+                showSuccess(result.mensaje || "La compra se ha realizado correctamente. ");
+                loadMovements(); // Recargar movimientos
+            } else {
+                showError(result.mensaje);
+            }
+        })
+        .catch(function(error) {
+            showError("Error: en executeTransaction " + error.message);
+        });
+}
+
+
+function loadMovements() {
+    fetch("/api/v1/movements")
+        .then(convertToJson)
+        .then(displayMovements)
+        .catch(function(error) {
+            showError("Failedm en el fetch movements: " + error.message);
+        });
+}
+
+function loadWalletStatus() {
+    fetch(API_URLS.status)
+        .then(convertToJson)
+        .then(displayWalletStatus)
+        .catch(function(error) {
+            showError("Failed to load wallet status: " + error.message);
+        });
+}
+// ==================== FUNCIONES DE UI ====================
+function toggleFormVisibility(formSelector) {
+    const form = getElement(formSelector);
+    form.classList.toggle("invisible");
+    return !form.classList.contains("invisible");
+}
+
+function hideForm(formSelector) {
+    getElement(formSelector).classList.add("invisible");
+}
+
+function showForm(formSelector) {
+    getElement(formSelector).classList.remove("invisible");
+}
+
+// ==================== EVENT LISTENERS ====================
+function setupEventListeners() {
+    // Botón de compra - mostrar/ocultar formulario
+    getElement(SELECTORS.buyBtn).addEventListener("click", function(event) {
+        event.preventDefault();
+        buyFormVisible = toggleFormVisibility(SELECTORS.exchangeForm);
+    });
+
+    // Botón cerrar formulario
+    getElement(SELECTORS.closeBtn).addEventListener("click", function(event) {
+        event.preventDefault();
+        hideForm(SELECTORS.exchangeForm);
+        deleteRate();
+        buyFormVisible = false;
+    });
+
+    // Botón calcular tipo de cambio
+    getElement(SELECTORS.calculateBtn).addEventListener("click", function(event) {
+        event.preventDefault();
+        calculateExchangeRate();
+    });
+
+    // Cambios en selects de moneda - deshabilitar botón submit
+    getElement(SELECTORS.fromCurrency).addEventListener("change", function() {
+        getElement(SELECTORS.submitBtn).disabled = true;
+    });
+    
+    getElement(SELECTORS.toCurrency).addEventListener("change", function() {
+        getElement(SELECTORS.submitBtn).disabled = true;
+    });
+
+    // Botón ejecutar transacción
+    getElement(SELECTORS.submitBtn).addEventListener("click", function(event) {
+        event.preventDefault();
+        confirm("¿Quiere realizar compra?");
+        if(confirm){
+            executeTransaction();
+            deleteRate();
+        }
+        
+
+    });
+
+    // Botón estado de inversión
+    getElement(SELECTORS.statusBtn).addEventListener("click", function(event) {
+        event.preventDefault();
+        
+        if (!statusFormVisible) {
+            showForm(SELECTORS.statusContainer);
+            loadWalletStatus();
+            statusFormVisible = true;
+        } else {
+            hideForm(SELECTORS.statusContainer);
+            statusFormVisible = false;
+        }
+    });
+
+    // Botón recalcular estado
+    getElement(SELECTORS.recalculateBtn).addEventListener("click", function(event) {
+        event.preventDefault();
+        loadWalletStatus();
     });
 }
 
-function guardarMovimiento(rate){
-    let fecha = new Date().toISOString().slice(0,10);
-    let fechaHora = new Date()
-    let horas = fechaHora.getHours();
-    let minutos = fechaHora.getMinutes();
-    let hora =`${horas}:${minutos}`;
-    let from_moneda = rate.rate.from_moneda;
-    let from_cantidad_actual = document.querySelector("#from_cantidad").value;
-    let to_moneda = rate.rate.to_moneda;
-    let to_cantidad = document.querySelector("#to_cantidad").textContent;
-    let from_cantidad = rate.rate.from_cantidad;
-
-    let data = {"fecha": fecha,
-                "hora": hora,
-                "from_moneda": from_moneda,
-                "from_cantidad": from_cantidad,
-                "to_moneda": to_moneda,
-                "to_cantidad": to_cantidad,
-                "from_cantidad_actual": from_cantidad_actual}
-            
-    let options = {
-        body: JSON.stringify(data),
-        method:"POST",
-        headers: {
-            "Content-Type":"application/json"
-        }
-    };
+// ==================== INICIALIZACIÓN ====================
+window.onload = function() {
+    // Cargar movimientos iniciales
+    loadMovements();
     
-    if (rate.monedas[0].includes(rate.rate.from_moneda) || rate.rate.from_moneda == 'EUR' ){
-        fetch("/api/v1/movimiento",options)
-            .then(convert_to_json)
-            .then(inserta)
-            .catch(process_error)
-    }else{
-        alert("Saldo insuficiente")
-    }
-        
-            
-}
-
-function inserta(respuesta){
-
-    let resp = respuesta[0]
-    if (resp && resp.status === "sucess"){
-        alert(resp.mensaje)
-        fetch("/api/v1/movimientos")
-            .then(convert_to_json)
-            .then(muestraTodos)
-            .catch(process_error) 
-    } else {
-        alert(resp.mensaje)
-    }
-
-      
-}
-
-function muestraStatus(wallet){
-
-    if (wallet.status == "sucess"){
-        let the_father = document.querySelector("#tabla_estado_inversion")
-        the_father.innerHTML = ""
-
-        for (divisa in  wallet.data.wallet) {
-            if (divisa != "EUR"){
-                let the_row = document.createElement("tr")
-                the_father.appendChild(the_row)
-                appendCell(the_row,wallet.data.wallet[divisa].balance)
-                appendCell(the_row,divisa)
-                appendCell(the_row,wallet.data.wallet[divisa].valor)
-            }         
-        }
+    // Configurar todos los event listeners
+    setupEventListeners();
     
-
-        let the_father_va = document.querySelector("#valor_actual")
-        the_father_va.innerHTML = ""
-        let spanValor = document.createElement("span")
-        let valorActual = wallet.data.actual_value
-        spanValor.innerHTML = valorActual
-        the_father_va.appendChild(spanValor)
-        
-
-        let the_father_pre = document.querySelector("#precio")
-        the_father_pre.innerHTML = ""
-        let spanPrecio = document.createElement("span")
-        let precio = wallet.data.price
-        spanPrecio.innerHTML = precio
-        the_father_pre.appendChild(spanPrecio)
-        
-
-        let the_father_re = document.querySelector("#resultado")
-        the_father_re.innerHTML = ""
-        let spanResultado = document.createElement("span")
-        let resultado = (wallet.data.actual_value + wallet.data.price)
-        spanResultado.innerHTML = resultado
-        the_father_re.appendChild(spanResultado)
-        
-        saveWallet = wallet
-    }else{
-        alert("Se ha producido el error: " + wallet.mensaje)
-    }
-        
-        
-}
-       
-
-window.onload = function(){
-
-    fetch("/api/v1/movimientos")
-        .then(convert_to_json)
-        .then(muestraTodos)
-        .catch(process_error)
-
-
-    let btnCompra = document.querySelector("#btnCompra")
-    let contadorCompra = 0
-    btnCompra.addEventListener("click", function(event){
-        event.preventDefault()
-
-        if (contadorCompra == 0){
-            let formulario = document.querySelector("#tasa_intercambio")
-            formulario.classList.remove("invisible")
-
-        let btnCalcular =document.querySelector("#calcular")
-            btnCalcular.addEventListener("click",function(event){
-            event.preventDefault();
-            consulta();
-            btnAceptar.disabled=false
-            
-        })
-        let fromMonedaSel =document.querySelector("#from_moneda")
-            fromMonedaSel.addEventListener("change",function(event){
-            event.preventDefault();
-            btnAceptar.disabled=true
-        })
-        let toMonedaSel =document.querySelector("#to_moneda")
-            toMonedaSel.addEventListener("change",function(event){
-            event.preventDefault();
-            btnAceptar.disabled=true
-        })
-        
-        
-
-        let btnAceptar = document.querySelector("#submit");
-            btnAceptar.addEventListener("click", function (event) {
-            event.preventDefault();
-            if (saveRate != null){
-                guardarMovimiento(saveRate);
-            }else{
-                alert("Calcula la conversión antes de comprar")
-            }
-            
-        })
-        contadorCompra = 1
-
-        }else if (contadorCompra==1){
-            document.querySelector("#tasa_intercambio").classList.add("invisible")
-            contadorCompra = 0
-        }
-        
-        let btnCerrar =document.querySelector("#cerrar")
-        btnCerrar.addEventListener("click", function(event){
-            event.preventDefault()
-            document.querySelector("#tasa_intercambio").classList.add("invisible")
-            contadorCompra = 0
-        })
-
-
-        }  
-    )
-    
-    
-    let btnStatus = document.querySelector("#btnStatus")
-    let contadorStatus = 0
-    btnStatus.addEventListener("click", function(event){
-        event.preventDefault();
-        if (contadorStatus==0){
-            let formularioStatus = document.querySelector("#estado_inversion")
-            formularioStatus.classList.remove("invisible")
-            fetch("/api/v1/status")
-                .then(convert_to_json)
-                .then(muestraStatus)
-                .catch(process_error)
-        contadorStatus = 1
-        } else if (contadorStatus == 1){
-            document.querySelector("#estado_inversion").classList.add("invisible")
-            contadorStatus = 0
-        }
-    
-    })
-
-    
-    let btnRecalcular = document.querySelector("#recalcular");
-    btnRecalcular.addEventListener("click",function(event){
-        event.preventDefault();
-        fetch("/api/v1/status")
-            .then(convert_to_json)
-            .then(muestraStatus)
-            .catch(process_error)             
-    })
-}
+    console.log("Crypto Exchange App loaded successfully");
+};

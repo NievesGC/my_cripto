@@ -1,0 +1,370 @@
+.color1 {color: #120907;}
+.color2 {color: #2a2745;}
+.color3 {color: #635f98;}
+.color4 {color: #a59ae9;}
+.color5 {color: #e7d2ed;}
+
+*{
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    min-width: min-content; /* revisar tamaños minimos y maximos -  */
+    max-width: max-content;
+    margin: 0px;
+    padding: 0px;
+}
+
+.video-fondo{
+    position: fixed;
+
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    opacity: 0.1;
+    z-index: -1;
+    
+}
+
+
+/* Diseño de cabecera */
+
+.cabecera{
+    background-color:#a59ae9 ;
+    width: 100vw;
+    height: 40vh; 
+    text-align: center;
+    padding: 3em;
+
+    display: flex;
+    justify-content: center;
+    align-items: end;
+   
+}
+
+.cabecera h1{
+    margin-bottom: 0px;
+    
+    font-size: 5em;
+    color:#2a2745; 
+}
+
+/* Diseño nav */
+
+.botones-superiores{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1em;
+}
+
+.boton{
+    background-color: #2a2745;
+    color: #e7d2ed ;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bolder;
+    padding: 1em;
+    border-radius: 20px;
+    margin-top: -1.5em;
+}
+
+.boton:hover{
+    background-color: #e7d2ed;
+    color: #2a2745;
+    transition: 0.3s;
+}
+
+/* Diseño de tablas de datos */
+/* disposicion de tablas */
+.datos{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2em;
+}
+
+/* diseño tabla de movimientos */
+.movimientos{
+    margin: 1em;
+    height: auto;
+    padding: 2em;
+    background-color:rgba(42, 39, 69, 0.70);
+    border-radius: 10px;  
+    text-align: center;
+}
+
+.tabla-movimientos{
+    text-align: center;
+    color:#a59ae9;
+}
+
+.movimientos h2{
+    color:#635f98;
+    text-shadow: 0px 0px 6px #e7d2ed;
+}
+
+.movimientos th{
+    color: #e7d2ed;
+    padding: 0.5em;
+}
+
+/* diseño tabla de inversion */
+.inversion{
+    margin: 1em;
+    width: auto;
+    height: auto;
+    padding: 2em;
+    background-color:rgba(42, 39, 69, 0.70);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.inversion h2{
+    color:#635f98;
+    text-shadow: 0px 0px 6px #e7d2ed;
+}
+
+.inversion th{
+    color:#a59ae9;
+    padding: 0.5em;
+}
+
+.tabla_estado_inversion{
+    text-align: center;
+    color: #e7d2ed;
+}
+
+.totales{
+    background-color:#e7d2ed33;
+    padding: 0.5em;
+    border-radius: 15px;
+    margin-top: 1em;
+    margin-bottom: 2em;
+    color: #e7d2ed;
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    
+}
+
+.inversion button{
+    background-color: #e7d2ed;
+    padding: 0.5em;
+    border-radius: 15%;
+}
+
+.inversion button:hover{
+    box-shadow: 0px 3px 10px #0a1207 ;
+}
+
+/* Diseño de tpv */
+.comprar{
+    width: 65%;
+    height: 64%;
+    background-color:#2a2745;
+    position: fixed;
+    top: 5em;
+    left: 20em;
+
+    text-align: center;
+    border-radius: 15px;
+}
+.comprar h2{
+    padding: 0.01em;
+    font-size: 4em;
+    background-color:#120907b7;
+    color: #635f98;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+.video-tpv{
+    position: fixed;
+    width: 65%;
+    height: 64%;
+    top: 5em;
+    left: 20em;
+    object-fit: cover;
+    opacity: 0.1;
+    z-index: -1;
+}
+
+.from-to{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+/* .mostrar-cantidad{
+    display: flex;
+    justify-content: space-evenly;
+}
+ */
+.f-t{
+    background-color: #e7d2ed91;
+    width: 120px;
+    height: 85px;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #2a2745;
+    text-transform: uppercase;
+    font-weight:bolder;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.f-t button{
+    background-color: #e7d2ed91;
+    width: 120px;
+    height: 85px;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 15px;
+    border: none;
+    
+}
+
+.f-t:hover{
+    box-shadow: 0px 3px 10px #e7d2ed;
+}
+
+
+.from-to input[type="number"],select{
+    width: 120px;;
+    height: 20px;
+    background-color: #120907;
+    color: #a59ae9;
+    font-weight: 700;
+}
+
+
+.mostrar-cantidad{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+    gap: 1%;
+}
+
+.cantidad{
+    min-width: 50%;
+    min-height: 35%;
+    background-color:#120907;
+    color: #a59ae9;
+    font-size: 2em ;
+    border-radius: 15px;
+    padding: 1em;  
+}
+
+
+
+.boton-comprar input[type="submit"]{
+    background-color: #e7d2ed;
+    padding-top: 125%;
+    padding-bottom: 125%;
+    border-radius: 15px;
+    border: none;
+}
+
+.boton-comprar input[type="submit"]:hover{
+    box-shadow: 0px 6px 10px #0a1207 ;
+}
+
+.boton-cerrar{
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+}
+
+.boton-cerrar button{
+    background-color: #e7d2ed;
+    padding: 1em;
+    border-radius: 15%;
+}
+
+
+.boton-cerrar:hover{
+    box-shadow: 0px 3px 10px #120907 ;
+}
+
+/* #precio_unitario{
+    background-color: #e7d2ed;
+    padding: 0.7em;
+}
+ */  /* se puede utilizar los ids generados js papra aplicar estilos */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Diseño footer */
+
+.pie{
+    background-color:#2a2745;
+    padding: 5em;
+    color: #a59ae9;
+    text-align: center;
+    
+}
+
+.sub-pie{
+    display: flex;
+    justify-content: center;
+}
+
+
+
+.sub-pie a{
+    color: #a59ae9;
+    text-decoration: none;
+    padding: 0.5em;
+}
+
+.sub-pie a:hover{
+    color: #e7d2ed;
+    transition: 0.3s;
+}
+
+
+
+/* NOOOO TOCAR */
+.invisible{
+    display: none;
+}

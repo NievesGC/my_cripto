@@ -22,6 +22,7 @@ class Movimiento:
     def from_cantidad_actual(self):
         return self._from_cantidad_actual
     
+    
     @from_cantidad_actual.setter
     def from_cantidad_actual(self,value):
         self._from_cantidad_actual = float(value)
@@ -84,7 +85,7 @@ class MovimientoDAOsqlite:
         cur.execute(query)
         con.close()
 
-    def insert(self,movimiento):
+    def insert(self,movimiento): #Introduce los satos que le pasa a la base de datos
         query = """
         INSERT INTO movimientos
             (fecha,hora,from_moneda,from_cantidad,to_moneda,to_cantidad)

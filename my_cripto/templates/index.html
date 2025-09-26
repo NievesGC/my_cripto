@@ -1,114 +1,147 @@
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/pico.css">
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <!-- <link rel="stylesheet" href="/static/css/styles.css"> -->
+    <!-- <link rel="stylesheet" href="/static/css/pico.css"> -->
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="icon" href="../my_cripto/static/multimedia/img/icons8-promedio-2-48.png" type="image/x-icon"> <!-- no funciona porque flask no lo puede manejar error 404 -->
+
     <title>CriptoSnow</title>
-    <script src="/static/js/app.js"></script>
+    
 </head>
 <body>
     <header>
-        <p>CriptoSnow</p>
+        
+        <div class="cabecera">
+           <h1>CriptoSnow</h1>
+        </div>
     </header>
+    <nav>
+        <div class="botones-superiores">
+            <a href="#" id="buy-btn" role="button" class="boton">Compra</a>
+            <a href="#" id="status-btn" role="button" class="boton">Status</a>
+        </div>
+    </nav>
     <div id="general">
-        <nav>
-            <a href="#" id="btnCompra" role="button">Compra</a>
-            <a href="#" id="btnStatus" role="button">Status</a>
-        </nav>
+        
        
        
-        <section id="lista_de_movimientos">
-            <h1 id = "Lista">Lista de movimientos</h1>
-            <table>
-                <thead>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>From</th>
-                    <th>Cantidad</th>
-                    <th>To</th>
-                    <th>Cantidad</th>
-                </thead>
-                <tbody id="tabla_movimientos">
-    
-                </tbody>
+        <video src="../static/multimedia/video/fondo.mp4" class="video-fondo" autoplay loop muted playsinline ></video>
+       
+        <div class="datos">
+            <section id="lista_de_movimientos" class="movimientos">
+                <h2 id = "Lista">Lista de movimientos</h2>
+                <table class="tabla-movimientos">
+                    <thead>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>From</th>
+                        <th>Cantidad</th>
+                        <th>To</th>
+                        <th>Cantidad</th>
+                    </thead>
+                    <tbody id="movements-table" class="tabla-movimientos">
+            
+                    </tbody>
+                    
+
+                </table>
                 
-            </table>
+            </section>
+            <section id="status-container" class="invisible inversion">
+                
+                <h2>Estado de la inversion</h2>
+                
+                <table>
+                    <thead>
+                        <th>Saldo</th>
+                        <th>Moneda</th>
+                        <th>Cantidad €</th>
+                    </thead>
+                    <tbody id="status-table" class="tabla_estado_inversion">
             
-        </section>
-        <section id="estado_inversion" class="invisible">
+                    </tbody>
+                </table>
+                <div class="totales grid">
+                    <p>Valor actual:</p><p id="valor_actual"> </p>
+                    <p>Precio: </p><p id="precio"></p>
+                    <p>Resultado:</p><p id="resultado">  </p>
+                </div>
             
-            <h1>Estado de la inversion</h1>
-            
-            <table>
-                <thead>
-                    <th>Saldo</th>
-                    <th>Moneda</th>
-                    <th>Cantidad €</th>
-                </thead>
-                <tbody id="tabla_estado_inversion">
-    
-                </tbody>
-            </table>
-            <p>Valor actual:</p><p id="valor_actual"> </p>
-            <p>Precio: </p><p id="precio"></p>
-            <p>Resultado:</p><p id="resultado">  </p>
-    
-            <button id="recalcular">Recalcular</button>
-              
-        </section>
-        <section id="tasa_intercambio" class="invisible">
+                <button id="recalculate">Recalcular</button>
+                  
+            </section>
+        </div>
+        <section id="exchange-form" class="invisible comprar">
+
+             <video src="../static/multimedia/video/valores.mp4" class="video-tpv" autoplay loop muted playsinline ></video>
+       
         
-            <h1 id = "tpv">TPV</h1>
-    
+            <h2 id = "tpv">TPV</h2>
             
-            <div id="from">
-                <label for="from_moneda_from">From:</label>
-                <select name="from_moneda" id="from_moneda" placeholder="From">
-                    <option value="EUR">EUR</option>
-                    <option value="ETH">ETH</option>
-                    <option value="BNB">BNB</option>
-                    <option value="ADA">ADA</option>
-                    <option value="DOT">DOT</option>
-                    <option value="BTC">BTC</option>
-                    <option value="USDT">USDT</option>
-                    <option value="XRP">XRP</option>
-                    <option value="SOL">SOL</option>
-                    <option value="MATIC">MATIC</option>
-                </select>
-                <label for="from_cantidad_input">Cantidad:</label>
-                <input type="number" name="from_cantidad" id="from_cantidad" step="0.0000000001" placeholder="Cantidad">
-                <button id="calcular">Calcular</button>
-                
+            <div class="from-to">
+
+                <div class="from">
+                    
+                    <div  class="f-t"><label for="from_moneda">divisa de abono</label></div> 
+                    
+                    <select name="from_moneda" id="from-currency" placeholder="From">
+                        <option value="EUR">EUR</option>
+                        <option value="ETH">ETH</option>
+                        <option value="BNB">BNB</option>
+                        <option value="ADA">ADA</option>
+                        <option value="DOT">DOT</option>
+                        <option value="BTC">BTC</option>
+                        <option value="USDT">USDT</option>
+                        <option value="XRP">XRP</option>
+                        <option value="SOL">SOL</option>
+                        <option value="MATIC">MATIC</option>
+                        <option value="none" selected disabled></option>
+                    </select>
+                </div>
+
+                <div >
+                    <div class="f-t"><label for="from_cantidad" >Importe</label> </div>             
+                    <input type="number" name="from_cantidad" id="from-amount" step="0.001" placeholder="Cantidad">
+                </div>
+
+                <div class="to" >
+                    <div class="f-t"><label for="to_moneda">divisa de cambio</label></div>
+                    <select name="to_moneda" id="to-currency" aria-placeholder="To">
+                        <option value="EUR">EUR</option>
+                        <option value="ETH">ETH</option>
+                        <option value="BNB">BNB</option>
+                        <option value="ADA">ADA</option>
+                        <option value="DOT">DOT</option>
+                        <option value="BTC">BTC</option>
+                        <option value="USDT">USDT</option>
+                        <option value="XRP">XRP</option>
+                        <option value="SOL">SOL</option>
+                        <option value="MATIC">MATIC</option>
+                        <option value="none" selected disabled></option>
+                    </select>
+                </div>
+
+                <div >
+                    <button class="f-t" id="calculate-btn"><img src="../static/multimedia/img/calculadora.png" alt="icono calculadora"></button>   
+                </div>
+            
             </div>
             
-        
-            <div id="to" >
-                
-                <label for="to_moneda_select">To:</label>
-                <select name="to_moneda" id="to_moneda" aria-placeholder="To">
-                    <option value="EUR">EUR</option>
-                    <option value="ETH">ETH</option>
-                    <option value="BNB">BNB</option>
-                    <option value="ADA">ADA</option>
-                    <option value="DOT">DOT</option>
-                    <option value="BTC">BTC</option>
-                    <option value="USDT">USDT</option>
-                    <option value="XRP">XRP</option>
-                    <option value="SOL">SOL</option>
-                    <option value="MATIC">MATIC</option>
-                </select>
-                <p>Cantidad:</p>
-                <section id="to_moneda_muestra">
+            
+            <div class="mostrar-cantidad">
+                <div class="cantidad">
                     
-                    
-                </section>
-                
-                
+                    <section id="display-container"><p>Cantidad:</p></section>
+                </div>
+                <div class="boton-comprar"> 
+                    <input type="submit" name="submit" id="submit" value="Comprar">
+                </div>
             </div>
-            <div id="botones_tpv">
-                <input type="submit" name="submit" id="submit" value="Comprar">
-                <button id="cerrar">Cerrar</button> 
+            
+            <div class="boton-cerrar">
+                <button id="close-btn">Cerrar</button> 
             </div>
             
         
@@ -119,7 +152,22 @@
         
     
     <footer>
-        <p class=>&copy; 2023 - Nieves Gómez</p>
+        <div class="pie">
+            
+            <div class="sub-pie">
+                <a href="#">Ayuda</a>
+                <a href="#">Preguntas frecuentes</a>
+                <a href="#">Soporte</a>
+                <a href="#">¿Quiénes somos?</a>
+            </div>
+            <div class="sub-pie">
+                <a href="#">Política de privacidad</a>
+                <a href="#">Condiciones</a>
+                <a href="#">Política de cookies</a>
+            </div>
+            <p class=>&copy; 2023 - Nieves Gómez</p>
+        </div>
     </footer>
+    <script src="../static/js/app.js"></script>
 </body>
 </html>
