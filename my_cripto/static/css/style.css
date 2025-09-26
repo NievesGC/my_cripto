@@ -16,52 +16,53 @@ body{
     padding: 0px;
 }
 
-.video-fondo{
+.background-video{
     position: fixed;
-
     width: 100vw;
     height: 100vh;
     top: 0;
     left: 0;
     object-fit: cover;
-    opacity: 0.1;
+    opacity: 0.05;
     z-index: -1;
-    
 }
 
 
 /* Diseño de cabecera */
 
-.cabecera{
-    background-color:#a59ae9 ;
+.banner{
+    background: linear-gradient(180deg, #7e48fb 25%,#9ffcff67 75%, #548aff 100%);
     width: 100vw;
-    height: 40vh; 
+    height: 30vh; 
     text-align: center;
     padding: 3em;
-
     display: flex;
     justify-content: center;
     align-items: end;
    
 }
 
-.cabecera h1{
+.banner h1{
     margin-bottom: 0px;
-    
-    font-size: 5em;
-    color:#2a2745; 
+    font-size: 10em;
+    color:#5a5a5a; 
+    font-family: "Montserrat Alternates", sans-serif;
+    font-weight: 700;
+    text-shadow: 0px 7px 15px rgb(255, 255, 255);
+
+
 }
 
 /* Diseño nav */
 
-.botones-superiores{
+.top-btn{
     display: flex;
     flex-direction: row;
     justify-content: center;
     gap: 1em;
 }
 
-.boton{
+.btn{
     background-color: #2a2745;
     color: #e7d2ed ;
     text-decoration: none;
@@ -72,10 +73,12 @@ body{
     margin-top: -1.5em;
 }
 
-.boton:hover{
+.btn:hover{
     background-color: #e7d2ed;
     color: #2a2745;
-    transition: 0.3s;
+    transition: 0.7s;
+    transform: scale(1.1);
+    box-shadow: 5px 5px 15px black;
 }
 
 /* Diseño de tablas de datos */
