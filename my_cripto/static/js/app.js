@@ -217,7 +217,7 @@ function executeTransaction() {
 
     // Verificar saldo suficiente
     const fromCurrency = savedExchangeRate.rate.from_moneda;
-    const hasSufficientBalance = savedExchangeRate.monedas[0].includes(fromCurrency) || fromCurrency === 'EUR';
+    const hasSufficientBalance = savedExchangeRate.monedas.includes(fromCurrency) || fromCurrency === 'EUR';
     
     if (!hasSufficientBalance) {
         showError("Saldo insuficiente");
