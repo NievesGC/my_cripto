@@ -27,14 +27,14 @@
             <a href="#" id="status-btn" role="button" class="btn">Status</a>
         </div>
     </nav>
-    <div>
+    <main>
         
         <video src="../static/multimedia/video/fondo.mp4" class="background-video" autoplay loop muted playsinline ></video>
        
-        <div class="datos">
-            <section id="lista_de_movimientos" class="movimientos">
-                <h2 id = "Lista">Lista de movimientos</h2>
-                <table class="tabla-movimientos">
+        <section class="data">
+            <div class="movements">
+                <h2>Lista de movimientos</h2>
+                <table class="list-movements">
                     <thead>
                         <th>Fecha</th>
                         <th>Hora</th>
@@ -44,14 +44,10 @@
                         <th>Cantidad</th>
                     </thead>
                     <tbody id="movements-table" class="tabla-movimientos">
-            
                     </tbody>
-                    
-
-                </table>
-                
-            </section>
-            <section id="status-container" class="invisible inversion">
+                </table> 
+            </div>
+            <div id="status-container" class="invisible inversion">
                 
                 <h2>Estado de la inversion</h2>
                 
@@ -61,20 +57,20 @@
                         <th>Moneda</th>
                         <th>Cantidad €</th>
                     </thead>
-                    <tbody id="status-table" class="tabla_estado_inversion">
+                    <tbody id="status-table" class="status-inversion">
             
                     </tbody>
                 </table>
-                <div class="totales grid">
+                <div class="totals grid">
                     <p>Valor actual:</p><p id="valor_actual"> </p>
-                    <p>Precio: </p><p id="precio"></p>
-                    <p>Resultado:</p><p id="resultado">  </p>
+                    <p>Precio de compra: </p><p id="precio"></p>
+                    <p>Beneficio:</p><p id="resultado">  </p>
                 </div>
             
                 <button id="recalculate">Recalcular</button>
                   
-            </section>
-        </div>
+            </div>
+        </section>
         <section id="exchange-form" class="invisible comprar">
 
              <video src="../static/multimedia/video/valores.mp4" class="video-tpv" autoplay loop muted playsinline ></video>
@@ -149,7 +145,7 @@
         
         </section>    
 
-    </div>
+    </main>
     
         
     
