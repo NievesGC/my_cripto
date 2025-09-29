@@ -86,6 +86,7 @@ def status():
     except:
         respuesta= {"status":"fail",
                     "mensaje":"Error en consulta"}
+        return jsonify(respuesta, 400) 
         
     
     

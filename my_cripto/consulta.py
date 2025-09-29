@@ -5,7 +5,7 @@ from flask import Flask
 
 
 
-apikey = app.config["SECRET_KEY"]
+apikey = app.config["API_KEY"]
 
 
 
