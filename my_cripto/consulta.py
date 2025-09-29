@@ -38,12 +38,12 @@ def get_info_divisa(data): #recibe todos los datods que estan en la table, (base
         if fila["to_moneda"] not in  info_divisa: #si la moneda no esta en el dic de arriba
             info_divisa[fila["to_moneda"]]={"balance":0} #mete la moneda y la pone con balance 0 ej EUR:{"balance: 0"}
         cantidad_to_fila= fila["to_cantidad"]
-        info_divisa[fila['to_moneda']]["balance"]+=cantidad_to_fila #suma la cantidad de esa moneda en el valor de balance
+        info_divisa[fila['to_moneda']]["balance"]+= cantidad_to_fila  #suma la cantidad de esa moneda en el valor de balance
         
         if fila["from_moneda"] not in  info_divisa:
             info_divisa[fila["from_moneda"]]={"balance":0}
         cantidad_from_fila= fila["from_cantidad"]
-        info_divisa[fila['from_moneda']]["balance"]-=cantidad_from_fila  #resta la cantidad de esa moneda en el valor de balance - para llevar un conteo de la catidad de las monedas que tien en la cartera 
+        info_divisa[fila['from_moneda']]["balance"]-= cantidad_to_fila #resta la cantidad de esa moneda en el valor de balance - para llevar un conteo de la catidad de las monedas que tien en la cartera 
     
     return info_divisa
       
@@ -62,7 +62,7 @@ def get_data_status(data):
     for moneda in info_divisa:
         if moneda in valores:
             
-            value_eur = info_divisa[moneda]["balance"] / valores[moneda]
+            value_eur =  info_divisa[moneda]["balance"] / valores[moneda]
             info_divisa[moneda]["valor"]= round(value_eur, 2) 
             if moneda != 'EUR':
                 actual_value+=value_eur
@@ -73,7 +73,6 @@ def get_data_status(data):
 
     actual_value = round(actual_value, 2)
     price = round(price, 2)
-
 
     return {"wallet": info_divisa,
             "price": price,
