@@ -115,7 +115,7 @@ function displayMovements(data) {
             table.appendChild(row);   
         }    
     } else {
-        alert( data.mensaje) /*  si  va -- pero no saca data.mensaje  */
+        alert( data.mensaje)
     }
      
       
@@ -165,7 +165,7 @@ function displayWalletStatus(wallet) {
         // Mostrar valores de resumen
         displaySummaryValue('#valor_actual', wallet.data.actual_value);
         displaySummaryValue('#precio', wallet.data.price);
-        displaySummaryValue('#resultado', wallet.data.actual_value + wallet.data.price);
+        displaySummaryValue('#resultado', (wallet.data.actual_value + wallet.data.price).toFixed(2));
         
         savedWalletData = wallet;
         
