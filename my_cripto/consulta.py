@@ -55,7 +55,7 @@ def get_data_status(data):
     response = requests.get(url) #hago la peticion de la api
     respuesta = response.json() #convierto la respuesta json
     for rates in respuesta["rates"]:
-        if rates["asset_id_quote"] in valores: #¿Podria controlar los valores que le pido a la api par asolo comprobhar los que tengo? - evitar consultar una lista tan larga
+        if rates["asset_id_quote"] in valores: 
             valor = rates["rate"]
             valores[rates["asset_id_quote"]] = valor #saca los valores por las monedas y los introduce en valores
     actual_value = 0
@@ -63,7 +63,7 @@ def get_data_status(data):
         if moneda in valores:
             
             value_eur = info_divisa[moneda]["balance"] / valores[moneda]
-            info_divisa[moneda]["valor"]=value_eur
+            info_divisa[moneda]["valor"]= round(value_eur, 2) 
             if moneda != 'EUR':
                 actual_value+=value_eur
             else:
@@ -71,12 +71,11 @@ def get_data_status(data):
     
     #hace el calculo de las monedas que hay a euros 
 
+    actual_value = round(actual_value, 2)
+    price = round(price, 2)
+
+
     return {"wallet": info_divisa,
             "price": price,
             "actual_value":actual_value}
 
-
-
-""" https://rest.coinapi.io/v1/exchangerate/EUR?apikey=1B731114-B858-433E-89F1-A792584BE95B%20&filter_asset_id=BTC,MATIC
-
-    con esta enlace se puede hacer la consulta a la api para que se devuelva solo las monedas que se nombrean en filter asset id """

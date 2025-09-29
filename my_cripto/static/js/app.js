@@ -115,7 +115,7 @@ function displayMovements(data) {
             table.appendChild(row);   
         }    
     } else {
-        alert( data.mensaje) /*  si  va -- pero no saca data.mensaje  */
+        alert( data.mensaje)
     }
      
       
@@ -165,7 +165,7 @@ function displayWalletStatus(wallet) {
         // Mostrar valores de resumen
         displaySummaryValue('#valor_actual', wallet.data.actual_value);
         displaySummaryValue('#precio', wallet.data.price);
-        displaySummaryValue('#resultado', wallet.data.actual_value + wallet.data.price);
+        displaySummaryValue('#resultado', (wallet.data.actual_value + wallet.data.price).toFixed(2));
         
         savedWalletData = wallet;
         
@@ -217,7 +217,7 @@ function executeTransaction() {
 
     // Verificar saldo suficiente
     const fromCurrency = savedExchangeRate.rate.from_moneda;
-    const hasSufficientBalance = savedExchangeRate.monedas[0].includes(fromCurrency) || fromCurrency === 'EUR';
+    const hasSufficientBalance = savedExchangeRate.monedas.includes(fromCurrency) || fromCurrency === 'EUR';
     
     if (!hasSufficientBalance) {
         showError("Saldo insuficiente");

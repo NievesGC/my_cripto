@@ -7,49 +7,47 @@
     <link rel="stylesheet" href="../static/css/style.css">
     <link rel="icon" href="../my_cripto/static/multimedia/img/icons8-promedio-2-48.png" type="image/x-icon"> <!-- no funciona porque flask no lo puede manejar error 404 -->
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chilanka&family=Mochiy+Pop+One&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Yanone+Kaffeesatz:wght@200..700&display=swap" rel="stylesheet">
+
     <title>CriptoSnow</title>
     
 </head>
 <body>
     <header>
         
-        <div class="cabecera">
+        <div class="banner">
            <h1>CriptoSnow</h1>
         </div>
     </header>
     <nav>
-        <div class="botones-superiores">
-            <a href="#" id="buy-btn" role="button" class="boton">Compra</a>
-            <a href="#" id="status-btn" role="button" class="boton">Status</a>
+        <div class="top-btn">
+            <a href="#" id="buy-btn" role="button" class="btn">Compra</a>
+            <a href="#" id="status-btn" role="button" class="btn">Status</a>
         </div>
     </nav>
-    <div id="general">
+    <main>
         
+        <video src="../static/multimedia/video/fondo.mp4" class="background-video" autoplay loop muted playsinline ></video>
        
-       
-        <video src="../static/multimedia/video/fondo.mp4" class="video-fondo" autoplay loop muted playsinline ></video>
-       
-        <div class="datos">
-            <section id="lista_de_movimientos" class="movimientos">
-                <h2 id = "Lista">Lista de movimientos</h2>
-                <table class="tabla-movimientos">
+        <section class="data">
+            <div class="movements">
+                <h2>Lista de movimientos</h2>
+                <table class="list-movements">
                     <thead>
                         <th>Fecha</th>
                         <th>Hora</th>
-                        <th>From</th>
+                        <th>Origen</th>
                         <th>Cantidad</th>
-                        <th>To</th>
-                        <th>Cantidad</th>
+                        <th>Destino</th>
+                        <th>Conversión</th>
                     </thead>
                     <tbody id="movements-table" class="tabla-movimientos">
-            
                     </tbody>
-                    
-
-                </table>
-                
-            </section>
-            <section id="status-container" class="invisible inversion">
+                </table> 
+            </div>
+            <div id="status-container" class="invisible inversion">
                 
                 <h2>Estado de la inversion</h2>
                 
@@ -59,21 +57,21 @@
                         <th>Moneda</th>
                         <th>Cantidad €</th>
                     </thead>
-                    <tbody id="status-table" class="tabla_estado_inversion">
+                    <tbody id="status-table" class="status-inversion">
             
                     </tbody>
                 </table>
-                <div class="totales grid">
+                <div class="totals grid">
                     <p>Valor actual:</p><p id="valor_actual"> </p>
-                    <p>Precio: </p><p id="precio"></p>
-                    <p>Resultado:</p><p id="resultado">  </p>
+                    <p>Precio de compra: </p><p id="precio"></p>
+                    <p>Beneficio:</p><p id="resultado"> </p>
                 </div>
             
                 <button id="recalculate">Recalcular</button>
                   
-            </section>
-        </div>
-        <section id="exchange-form" class="invisible comprar">
+            </div>
+        </section>
+        <section id="exchange-form" class="invisible buy">
 
              <video src="../static/multimedia/video/valores.mp4" class="video-tpv" autoplay loop muted playsinline ></video>
        
@@ -82,9 +80,9 @@
             
             <div class="from-to">
 
-                <div class="from">
+                <div class="from form-group">
                     
-                    <div  class="f-t"><label for="from_moneda">divisa de abono</label></div> 
+                    <div  class="f-t"><label for="from_moneda">Divisa de abono</label></div> 
                     
                     <select name="from_moneda" id="from-currency" placeholder="From">
                         <option value="EUR">EUR</option>
@@ -101,13 +99,13 @@
                     </select>
                 </div>
 
-                <div >
+                <div class="form-group">
                     <div class="f-t"><label for="from_cantidad" >Importe</label> </div>             
                     <input type="number" name="from_cantidad" id="from-amount" step="0.001" placeholder="Cantidad">
                 </div>
 
-                <div class="to" >
-                    <div class="f-t"><label for="to_moneda">divisa de cambio</label></div>
+                <div class="to form-group" >
+                    <div class="f-t"><label for="to_moneda">Divisa de cambio</label></div>
                     <select name="to_moneda" id="to-currency" aria-placeholder="To">
                         <option value="EUR">EUR</option>
                         <option value="ETH">ETH</option>
@@ -123,44 +121,44 @@
                     </select>
                 </div>
 
-                <div >
+                <div class="form-group" >
                     <button class="f-t" id="calculate-btn"><img src="../static/multimedia/img/calculadora.png" alt="icono calculadora"></button>   
                 </div>
             
             </div>
             
             
-            <div class="mostrar-cantidad">
-                <div class="cantidad">
+            <div class="display-amount">
+                <div class="amount">
                     
                     <section id="display-container"><p>Cantidad:</p></section>
                 </div>
-                <div class="boton-comprar"> 
+                <div class="button-buy"> 
                     <input type="submit" name="submit" id="submit" value="Comprar">
                 </div>
             </div>
             
-            <div class="boton-cerrar">
+            <div class="button-cerrar">
                 <button id="close-btn">Cerrar</button> 
             </div>
             
         
         </section>    
 
-    </div>
+    </main>
     
         
     
     <footer>
-        <div class="pie">
+        <div class="foot">
             
-            <div class="sub-pie">
+            <div class="sub-foot">
                 <a href="#">Ayuda</a>
                 <a href="#">Preguntas frecuentes</a>
                 <a href="#">Soporte</a>
                 <a href="#">¿Quiénes somos?</a>
             </div>
-            <div class="sub-pie">
+            <div class="sub-foot">
                 <a href="#">Política de privacidad</a>
                 <a href="#">Condiciones</a>
                 <a href="#">Política de cookies</a>
